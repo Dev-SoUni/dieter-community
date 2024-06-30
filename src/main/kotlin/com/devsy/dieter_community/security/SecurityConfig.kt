@@ -18,6 +18,7 @@ class SecurityConfig {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http {
+            csrf { disable() }
             authorizeRequests {
                 authorize("/api/**", permitAll)
             }
