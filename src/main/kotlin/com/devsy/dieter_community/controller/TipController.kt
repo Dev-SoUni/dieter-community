@@ -1,7 +1,7 @@
 package com.devsy.dieter_community.controller
 
 import com.devsy.dieter_community.domain.Tip
-import com.devsy.dieter_community.dto.PostTipDTO
+import com.devsy.dieter_community.dto.TipPostDTO
 import com.devsy.dieter_community.service.TipService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,7 +28,7 @@ class TipController(
 
     @PostMapping("")
     fun postTip(
-        @RequestBody requestBody: PostTipDTO,
+        @RequestBody requestBody: TipPostDTO,
     ): ResponseEntity<Tip> {
         val tip = tipService.save(
             requestBody.title,

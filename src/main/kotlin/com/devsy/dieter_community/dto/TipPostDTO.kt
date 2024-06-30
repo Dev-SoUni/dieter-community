@@ -1,6 +1,6 @@
 package com.devsy.dieter_community.dto
 
-class PostTipDTO(
+class TipPostDTO(
     val title: String,
     val content: String
 )
