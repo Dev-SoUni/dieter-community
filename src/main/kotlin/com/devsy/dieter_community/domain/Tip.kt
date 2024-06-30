@@ -6,7 +6,6 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "tip")
 class Tip(
-    id: Long,
     title: String,
     content: String,
     createdAt: LocalDateTime,
@@ -15,7 +14,7 @@ class Tip(
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = id
+    val id: Long? = null
 
     @Column(name = "title")
     var title: String = title
