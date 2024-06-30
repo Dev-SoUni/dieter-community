@@ -1,0 +1,11 @@
+### 팁 전체 조회
+GET http://localhost:8080/api/tips
+
+### 팁 등록
+POST http://localhost:8080/api/tips
+Content-Type: application/json
+
+{
+  "title": "꿀팁 제목",
+  "content": "개굴"
+}

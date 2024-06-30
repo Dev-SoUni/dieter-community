@@ -2,6 +2,7 @@ package com.devsy.dieter_community.domain
 
 import jakarta.persistence.*
 import java.time.LocalDateTime
+import java.util.UUID
 
 @Entity
 @Table(name = "tip")
@@ -13,8 +14,7 @@ class Tip(
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null
+    var id: String? = null
 
     @Column(name = "title")
     var title: String = title
@@ -30,5 +30,10 @@ class Tip(
 
     @Column(name = "created_at")
     val createdAt: LocalDateTime = createdAt
+
+    @PrePersist
+    fun prePersist() {
+        this.id = UUID.randomUUID().toString()
+    }
 
 }
