@@ -19,6 +19,7 @@ class SecurityConfig {
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             csrf { disable() }
+            cors {  }
             authorizeRequests {
                 authorize("/api/**", permitAll)
             }
