@@ -1,15 +1,18 @@
 package com.devsy.dieter_community.domain
 
 import jakarta.persistence.*
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
 @Table(name = "tip")
+@EntityListeners(AuditingEntityListener::class)
 class Tip(
     title: String,
     content: String,
-    createdAt: LocalDateTime,
 ) {
 
     @Id
@@ -26,10 +29,12 @@ class Tip(
     val writerId: Long? = null
 
     @Column(name = "updated_at")
-    var updatedAt: LocalDateTime? = null
+    @LastModifiedDate
+    lateinit var updatedAt: LocalDateTime
 
     @Column(name = "created_at")
-    val createdAt: LocalDateTime = createdAt
+    @CreatedDate
+    lateinit var createdAt: LocalDateTime
 
     @PrePersist
     fun prePersist() {

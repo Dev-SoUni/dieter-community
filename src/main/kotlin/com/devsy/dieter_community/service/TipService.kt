@@ -4,7 +4,6 @@ import com.devsy.dieter_community.domain.Tip
 import com.devsy.dieter_community.repository.TipRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class TipService (
@@ -36,7 +35,6 @@ class TipService (
         val tip = Tip(
             title = title,
             content = content,
-            createdAt = LocalDateTime.now()
         )
 
         return tipRepository.save(tip)

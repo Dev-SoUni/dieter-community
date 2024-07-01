@@ -1,4 +1,4 @@
-package com.devsy.dieter_community.security
+package com.devsy.dieter_community.config.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
