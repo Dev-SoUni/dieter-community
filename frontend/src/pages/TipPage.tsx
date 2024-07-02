@@ -7,6 +7,8 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 
 import type { TipResponseDTO } from '../ts/dto.ts'
 
@@ -48,8 +50,14 @@ const TipPage = () => {
           </Table>
         </TableContainer>
       </div>
-      <Link to="/tips/new">등록</Link>
-      <Link to="/">main</Link>
+      <Box mt={4} gap={2} display="flex" justifyContent="end">
+        <Link to="/tips/new">
+          <Button variant="contained">등록</Button>
+        </Link>
+        <Link to="/">
+          <Button variant="contained">main</Button>
+        </Link>
+      </Box>
     </div>
   )
 }
