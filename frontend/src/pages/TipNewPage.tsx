@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
 
 const TipNewPage = () => {
   const navigate = useNavigate()
@@ -42,30 +45,42 @@ const TipNewPage = () => {
     <div>
       <div>
         <form onSubmit={handleSubmit}>
-          <div>
-            <input
-              type="text"
-              placeholder="제목"
-              required
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-          <div>
-            <textarea
-              rows={10}
-              placeholder="내용"
-              required
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </div>
-          <div>
-            <button type="submit">등록</button>
-          </div>
+          <Box display="flex" flexDirection="column" gap={2}>
+            <div>
+              <TextField
+                label="제목"
+                variant="outlined"
+                type="text"
+                placeholder="제목을 입력해주세요."
+                required
+                fullWidth
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+            <div>
+              <TextField
+                label="내용"
+                placeholder="내용을 입력해주세요."
+                required
+                multiline
+                fullWidth
+                rows={10}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            </div>
+            <Box display="flex" justifyContent="end" gap={2}>
+              <Button type="submit" variant="contained">
+                등록
+              </Button>
+              <Link to="/tips">
+                <Button variant="outlined">목록</Button>
+              </Link>
+            </Box>
+          </Box>
         </form>
       </div>
-      <Link to="/tips">목록</Link>
     </div>
   )
 }
