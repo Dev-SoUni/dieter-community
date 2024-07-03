@@ -10,6 +10,7 @@ import '@fontsource/roboto/700.css'
 import MainPage from './pages/MainPage.tsx'
 import TipPage from './pages/TipPage.tsx'
 import TipNewPage from './pages/TipNewPage.tsx'
+import TipDetailPage from './pages/TipDetailPage.tsx'
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: '/tips/new',
     element: <TipNewPage />,
+  },
+  {
+    path: '/tips/:id',
+    element: <TipDetailPage />,
   },
 ])
 
