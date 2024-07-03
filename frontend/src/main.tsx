@@ -11,6 +11,7 @@ import MainPage from './pages/MainPage.tsx'
 import TipPage from './pages/TipPage.tsx'
 import TipNewPage from './pages/TipNewPage.tsx'
 import TipDetailPage from './pages/TipDetailPage.tsx'
+import TipEditPage from './pages/TipEditPage.tsx'
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: '/tips/:id',
     element: <TipDetailPage />,
+  },
+  {
+    path: '/tips/:id/edit',
+    element: <TipEditPage />,
   },
 ])
 

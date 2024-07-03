@@ -56,6 +56,9 @@ const TipDetailPage = () => {
         </Typography>
         <Typography>{tip.content}</Typography>
         <Box display="flex" gap={2}>
+          <Link to={`/tips/${tip.id}/edit`}>
+            <Button variant="outlined">수정</Button>
+          </Link>
           <DeleteButton onConfirm={handleDelete} />
           <Link to="/tips">
             <Button variant="outlined">목록</Button>
