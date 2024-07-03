@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
+import { TipListItem } from '../components/TipListItem.tsx'
 import type { TipResponseDTO } from '../ts/dto.ts'
 
 const TipPage = () => {
@@ -36,15 +37,17 @@ const TipPage = () => {
                 <TableCell align="center">아이디</TableCell>
                 <TableCell align="left">제목</TableCell>
                 <TableCell align="center">등록 날짜</TableCell>
+                <TableCell align="center" sx={{ width: 60 }} />
               </TableRow>
             </TableHead>
             <TableBody>
               {tips.map((tip) => (
-                <TableRow key={tip.id}>
-                  <TableCell align="center">{tip.id}</TableCell>
-                  <TableCell align="left">{tip.title}</TableCell>
-                  <TableCell align="center">{tip.createdAt}</TableCell>
-                </TableRow>
+                <TipListItem
+                  key={tip.id}
+                  id={tip.id}
+                  title={tip.title}
+                  createdAt={tip.createdAt}
+                />
               ))}
             </TableBody>
           </Table>
