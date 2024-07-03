@@ -1,7 +1,10 @@
-@id = 06203b7b-9872-4651-9e00-65b25e6df7a5
+@id = new
 
 ### 팁 전체 조회
 GET http://localhost:8080/api/tips
+
+### 팁 조회
+GET http://localhost:8080/api/tips/{{id}}
 
 ### 팁 등록
 POST http://localhost:8080/api/tips

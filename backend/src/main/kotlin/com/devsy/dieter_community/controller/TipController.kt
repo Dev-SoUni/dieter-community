@@ -4,6 +4,7 @@ import com.devsy.dieter_community.domain.Tip
 import com.devsy.dieter_community.dto.TipPatchDTO
 import com.devsy.dieter_community.dto.TipPostDTO
 import com.devsy.dieter_community.dto.TipResponseDTO
+import com.devsy.dieter_community.exception.CustomException
 import com.devsy.dieter_community.service.TipService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -22,14 +23,18 @@ class TipController(
             tipService
                 .findAll()
                 .map {
-                    TipResponseDTO(
-                        id = it.id!!,
-                        title = it.title,
-                        content = it.content,
-                        updatedAt = it.updatedAt,
-                        createdAt = it.createdAt,
-                    )
+                    TipResponseDTO(it)
                 }
+        )
+    }
+
+    @GetMapping("/{id}")
+    fun getTip(
+        @PathVariable(name = "id") id: String,
+    ): ResponseEntity<TipResponseDTO> {
+        val tip = tipService.findById(id) ?: throw CustomException(HttpStatus.NOT_FOUND, "해당 꿀팁을 찾을 수 없습니다.")
+        return ResponseEntity.ok(
+            TipResponseDTO(tip)
         )
     }
 

@@ -14,6 +14,10 @@ class TipService (
         return tipRepository.findAll()
     }
 
+    fun findById(id: String): Tip? {
+        return tipRepository.findByIdOrNull(id)
+    }
+
     fun patch(
         id: String,
         title: String?,
