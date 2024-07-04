@@ -7,7 +7,7 @@
 ### 🛠️ 기술스택
 
 - `Kotlin` `Spring Boot` `Spring Security`
-- `TypeScript` `React` `MUI`
+- `TypeScript` `React` `Redux` `Axios` `MUI`
 - `PostgreSQL` `JPA`
 - `Docker` `Docker Compose`
 
