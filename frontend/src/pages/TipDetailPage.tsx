@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 
+import { defaultAxios } from '../config/axios.ts'
 import { DeleteButton } from '../components/DeleteButton.tsx'
 import type { TipResponseDTO } from '../ts/dto.ts'
 
@@ -14,11 +15,12 @@ const TipDetailPage = () => {
 
   useEffect(() => {
     const requestTip = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/tips/${params.id}`,
-      )
-      const body = await response.json()
-      setTip(body)
+      try {
+        const response = await defaultAxios.get(`/api/tips/${params.id}`)
+        setTip(response.data)
+      } catch (error) {
+        alert('관리자에게 문의주세요.')
+      }
     }
 
     requestTip()
@@ -26,9 +28,7 @@ const TipDetailPage = () => {
 
   const handleDelete = async () => {
     try {
-      await fetch(`http://localhost:8080/api/tips/${params.id}`, {
-        method: 'DELETE',
-      })
+      await defaultAxios.delete(`/api/tips/${params.id}`)
       navigate('/tips')
     } catch (error) {
       alert('죄송합니다. 관리자에게 문의 주세요.')

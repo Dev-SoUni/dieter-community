@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import Typography from '@mui/material/Typography'
 
+import { defaultAxios } from '../config/axios.ts'
 import type { TipResponseDTO } from '../ts/dto.ts'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
@@ -16,14 +17,14 @@ const TipEditPage = () => {
 
   useEffect(() => {
     const requestTip = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/tips/${params.id}`,
-      )
-      const body = await response.json()
-
-      setTip(body)
-      setTitle(body.title)
-      setContent(body.content)
+      try {
+        const response = await defaultAxios.get(`/api/tips/${params.id}`)
+        setTip(response.data)
+        setTitle(response.data.title)
+        setContent(response.data.content)
+      } catch (error) {
+        alert('관리자에게 문의주세요.')
+      }
     }
     requestTip()
   }, [])
@@ -31,13 +32,11 @@ const TipEditPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await fetch(`http://localhost:8080/api/tips/${params.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ title, content }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      await defaultAxios.patch(`/api/tips/${params.id}`, {
+        title,
+        content,
       })
+
       alert('해당 게시물이 수정되었습니다.')
       navigate(`/tips/${params.id}`)
     } catch (error) {

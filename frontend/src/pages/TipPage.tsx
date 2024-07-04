@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
+import { defaultAxios } from '../config/axios.ts'
 import { TipListItem } from '../components/TipListItem.tsx'
 import type { TipResponseDTO } from '../ts/dto.ts'
 
@@ -18,11 +19,13 @@ const TipPage = () => {
 
   useEffect(() => {
     const requestTips = async () => {
-      const response = await fetch('http://localhost:8080/api/tips')
-      const body = await response.json()
-      setTips(body)
+      try {
+        const response = await defaultAxios.get('/api/tips')
+        setTips(response.data)
+      } catch (error) {
+        alert('관리자에게 문의주세요.')
+      }
     }
-
     requestTips()
   }, [])
 

@@ -4,6 +4,8 @@ import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
+import { defaultAxios } from '../config/axios.ts'
+
 const TipNewPage = () => {
   const navigate = useNavigate()
 
@@ -23,17 +25,10 @@ const TipNewPage = () => {
     }
 
     try {
-      await fetch('http://localhost:8080/api/tips', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title,
-          content,
-        }),
+      await defaultAxios.post('/api/tips', {
+        title,
+        content,
       })
-
       alert('꿀팁이 등록되었습니다.')
       navigate('/tips')
     } catch (e) {
