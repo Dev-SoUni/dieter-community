@@ -2,6 +2,8 @@ package com.devsy.dieter_community.service
 
 import com.devsy.dieter_community.domain.Tip
 import com.devsy.dieter_community.repository.TipRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -12,6 +14,10 @@ class TipService (
 
     fun findAll(): List<Tip> {
         return tipRepository.findAll()
+    }
+
+    fun findByPageable(pageable: Pageable): Page<Tip> {
+        return tipRepository.findAll(pageable)
     }
 
     fun findById(id: String): Tip? {

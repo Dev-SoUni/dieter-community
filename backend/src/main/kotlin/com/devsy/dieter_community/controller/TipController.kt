@@ -6,6 +6,10 @@ import com.devsy.dieter_community.dto.TipPostDTO
 import com.devsy.dieter_community.dto.TipResponseDTO
 import com.devsy.dieter_community.exception.CustomException
 import com.devsy.dieter_community.service.TipService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -18,10 +22,13 @@ class TipController(
 ) {
 
     @GetMapping("")
-    fun getTips(): ResponseEntity<List<TipResponseDTO>> {
+    fun getTips(
+        @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable,
+        @RequestParam(name = "page", defaultValue = "0", required = false) page: Int
+    ): ResponseEntity<Page<TipResponseDTO>> {
         return ResponseEntity.ok(
             tipService
-                .findAll()
+                .findByPageable(pageable)
                 .map {
                     TipResponseDTO(it)
                 }
