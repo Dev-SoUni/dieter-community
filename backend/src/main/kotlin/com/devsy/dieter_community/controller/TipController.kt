@@ -24,11 +24,12 @@ class TipController(
     @GetMapping("")
     fun getTips(
         @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable,
+        @RequestParam(name = "title", defaultValue = "", required = false) title: String,
         @RequestParam(name = "page", defaultValue = "0", required = false) page: Int
     ): ResponseEntity<Page<TipResponseDTO>> {
         return ResponseEntity.ok(
             tipService
-                .findByPageable(pageable)
+                .findByTitle(pageable, title)
                 .map {
                     TipResponseDTO(it)
                 }

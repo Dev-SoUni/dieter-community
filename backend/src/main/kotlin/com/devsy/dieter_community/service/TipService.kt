@@ -12,12 +12,11 @@ class TipService (
     val tipRepository: TipRepository
 ) {
 
-    fun findAll(): List<Tip> {
-        return tipRepository.findAll()
-    }
-
-    fun findByPageable(pageable: Pageable): Page<Tip> {
-        return tipRepository.findAll(pageable)
+    fun findByTitle(
+        pageable: Pageable,
+        title: String
+    ): Page<Tip> {
+        return tipRepository.findByTitleContaining(pageable, title)
     }
 
     fun findById(id: String): Tip? {
