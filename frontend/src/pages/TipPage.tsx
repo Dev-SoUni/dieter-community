@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -9,21 +9,26 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
 import { Stack } from '@mui/material'
-
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import SearchIcon from '@mui/icons-material/Search'
 import TextField from '@mui/material/TextField'
 import Pagination from '@mui/material/Pagination'
 
+import { useAppSelector, useAppDispatch } from '../app/hook.ts'
+import {
+  setPageableData,
+  setPage,
+  setSearch,
+} from '../features/tip/tipSlice.ts'
 import { defaultAxios } from '../config/axios.ts'
 import { TipListItem } from '../components/TipListItem.tsx'
-import type { Page, TipResponseDTO } from '../ts/dto.ts'
+import Typography from '@mui/material/Typography'
 
 const TipPage = () => {
-  const [currentPage, setCurrentPage] = useState<number>(0)
-  const [tipPage, setTipPage] = useState<Page<TipResponseDTO> | null>(null)
-  const [searchTitle, setSearchTitle] = useState<string>('')
+  const dispatch = useAppDispatch()
+  const { pageableData, page, search } = useAppSelector((state) => state.tip)
+
   const searchTitleRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -31,38 +36,49 @@ const TipPage = () => {
       try {
         const response = await defaultAxios.get(`/api/tips`, {
           params: {
-            page: currentPage,
-            title: searchTitle,
+            page: page,
+            title: search.title,
           },
         })
-        setTipPage(response.data)
+        dispatch(setPageableData(response.data))
       } catch (error) {
         alert('관리자에게 문의주세요.')
       }
     }
     requestTips()
-  }, [currentPage, searchTitle])
+  }, [page, search])
 
   const handleSearchSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const value = searchTitleRef.current?.value || ''
-    setCurrentPage(0)
-    setSearchTitle(value)
+    dispatch(setPage(0))
+    dispatch(setSearch({ title: value }))
   }
 
   const handlePaginationChange = (
     _: React.ChangeEvent<unknown>,
     value: number,
   ) => {
-    setCurrentPage(value - 1)
+    dispatch(setPage(value - 1))
   }
 
   return (
     <div>
       <h1>TIPS</h1>
 
-      {/* 검색 */}
-      <Box display="flex" justifyContent="end" mb={2}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
+        {/* 검색 정보*/}
+        <Box>
+          {search.title && (
+            <Typography>'{search.title}' 에 대한 검색 결과입니다.</Typography>
+          )}
+        </Box>
+        {/* 검색 */}
         <form onSubmit={handleSearchSubmit}>
           <Stack direction="row" gap={1}>
             <Box width={300}>
@@ -72,6 +88,7 @@ const TipPage = () => {
                 placeholder="제목을 입력해주세요."
                 fullWidth
                 size="small"
+                defaultValue={search.title || ''}
               />
             </Box>
             <IconButton type="submit">
@@ -82,7 +99,6 @@ const TipPage = () => {
       </Box>
 
       <div>
-        {/* 테이블 */}
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -94,8 +110,8 @@ const TipPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tipPage &&
-                tipPage.content.map((tip) => (
+              {pageableData &&
+                pageableData.content.map((tip) => (
                   <TipListItem
                     key={tip.id}
                     id={tip.id}
@@ -108,9 +124,10 @@ const TipPage = () => {
         </TableContainer>
       </div>
       <Box mt={4} display="flex" justifyContent="center">
-        {tipPage && (
+        {pageableData && (
           <Pagination
-            count={tipPage.totalPages}
+            count={pageableData.totalPages}
+            page={page + 1}
             color="primary"
             onChange={handlePaginationChange}
           />
