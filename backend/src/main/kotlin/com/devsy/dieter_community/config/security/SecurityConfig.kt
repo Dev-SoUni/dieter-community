@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.invoke
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 
 // Spring Security
@@ -14,6 +15,11 @@ import org.springframework.security.web.SecurityFilterChain
 @Configuration
 @EnableWebSecurity // 스프링 시큐리티 필터가 스프링 필터체인에 등록되도록 하는 어노테이션
 class SecurityConfig {
+
+    @Bean
+    fun passwordEncoder(): BCryptPasswordEncoder {
+        return BCryptPasswordEncoder()
+    }
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {

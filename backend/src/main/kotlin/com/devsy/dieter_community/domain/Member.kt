@@ -4,6 +4,9 @@ import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDateTime
 
 @Entity
@@ -13,7 +16,7 @@ class Member(
     email: String,
     nickname: String,
     password: String,
-) {
+) : UserDetails {
 
     @Id
     @Column(name = "id")
@@ -35,4 +38,21 @@ class Member(
     @Column(name = "created_at")
     @CreatedDate
     lateinit var createdAt: LocalDateTime
+
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
+        val authority = SimpleGrantedAuthority("USER")
+
+        return mutableListOf(authority)
+    }
+
+    override fun getUsername(): String {
+        return this.email
+    }
+
+    override fun getPassword(): String {
+        return this.password
+    }
+
 }
+
+
