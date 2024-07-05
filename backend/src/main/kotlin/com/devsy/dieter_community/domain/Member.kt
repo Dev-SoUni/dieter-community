@@ -29,7 +29,7 @@ class Member(
     val nickname: String = nickname
 
     @Column(name = "password")
-    val password: String = password
+    private val password: String = password
 
     @Column(name = "updated_at")
     @LastModifiedDate
