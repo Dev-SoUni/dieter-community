@@ -4,3 +4,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/community
     username: dev
     password: root
+  data:
+    redis:
+      host: localhost
+      port: 6379
