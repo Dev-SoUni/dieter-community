@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import tipReducer from '../features/tip/tipSlice.ts'
+import authReducer from '../features/auth/authSlice.ts'
 
 export const store = configureStore({
   reducer: {
+    auth: authReducer,
     tip: tipReducer,
   },
 })
