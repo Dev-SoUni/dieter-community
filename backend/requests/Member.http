@@ -1,0 +1,9 @@
+# 회원 가입
+POST http://localhost:8080/api/members
+Content-Type: application/json
+
+{
+  "email": "bsy1482@naver.com",
+  "nickname": "개구리",
+  "password": "1234"
+}

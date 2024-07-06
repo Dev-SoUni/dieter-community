@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDateTime
+import java.util.UUID
 
 @Entity
 @Table(name = "member")
@@ -53,6 +54,10 @@ class Member(
         return this.password
     }
 
+    @PrePersist
+    fun prePersist() {
+        this.id = UUID.randomUUID().toString()
+    }
 }
 
 
