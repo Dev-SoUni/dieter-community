@@ -1,11 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+import type { MemberResponse } from '../../ts/dto.ts'
+
 export interface AuthState {
   accessToken: string | null
+  member: MemberResponse | null
 }
 
 const initialState: AuthState = {
   accessToken: null,
+  member: null,
 }
 
 export const authSlice = createSlice({
@@ -18,9 +22,12 @@ export const authSlice = createSlice({
     ) => {
       state.accessToken = action.payload
     },
+    setMember: (state, action: PayloadAction<AuthState['member']>) => {
+      state.member = action.payload
+    },
   },
 })
 
-export const { setAccessToken } = authSlice.actions
+export const { setAccessToken, setMember } = authSlice.actions
 
 export default authSlice.reducer

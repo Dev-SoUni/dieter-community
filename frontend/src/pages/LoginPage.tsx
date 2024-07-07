@@ -7,8 +7,9 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
 import { useAppDispatch, useAppSelector } from '../app/hook.ts'
-import { setAccessToken } from '../features/auth/authSlice.ts'
+import { setAccessToken, setMember } from '../features/auth/authSlice.ts'
 import { defaultAxios } from '../config/axios.ts'
+import type { AuthenticationResponse } from '../ts/dto.ts'
 
 interface FormInputs {
   email: string
@@ -42,10 +43,15 @@ const LoginPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const response = await defaultAxios.post('/api/auth', formInputs)
-      const { accessToken } = response.data
-      dispatch(setAccessToken(accessToken))
+      const response = await defaultAxios.post<AuthenticationResponse>(
+        '/api/auth',
+        formInputs,
+      )
+      const { email, nickname, accessToken } = response.data
+
       window.localStorage.setItem('accessToken', accessToken)
+      dispatch(setAccessToken(accessToken))
+      dispatch(setMember({ email, nickname }))
     } catch (error) {
       alert('관리자에게 문의주세요.')
     }
