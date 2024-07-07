@@ -10,3 +10,18 @@ export const defaultAxios = axios.create({
     'Content-Type': 'application/json',
   },
 })
+
+defaultAxios.interceptors.request.use(
+  (config) => {
+    const accessToken = window.localStorage.getItem('accessToken')
+
+    if (accessToken) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`
+    }
+
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  },
+)
