@@ -11,6 +11,11 @@ class TipResponseDTO(tip: Tip){
 
     val content: String = tip.content
 
+    val writer: MemberResponse = MemberResponse(
+        email = tip.writer.email,
+        nickname = tip.writer.nickname
+    )
+
     @JsonFormat(pattern = "yyy.MM.dd")
     val updatedAt: LocalDateTime = tip.updatedAt
 
