@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 
+import { useAppSelector } from '../app/hook.ts'
 import { defaultAxios } from '../config/axios.ts'
 import { DeleteButton } from '../components/DeleteButton.tsx'
 import type { TipResponseDTO } from '../ts/dto.ts'
@@ -11,12 +12,18 @@ import type { TipResponseDTO } from '../ts/dto.ts'
 const TipDetailPage = () => {
   const params = useParams()
   const navigate = useNavigate()
+
   const [tip, setTip] = useState<TipResponseDTO | null>(null)
+  const [canEdit, setCanEdit] = useState<boolean>(false)
+
+  const authStore = useAppSelector((state) => state.auth)
 
   useEffect(() => {
     const requestTip = async () => {
       try {
-        const response = await defaultAxios.get(`/api/tips/${params.id}`)
+        const response = await defaultAxios.get<TipResponseDTO>(
+          `/api/tips/${params.id}`,
+        )
         setTip(response.data)
       } catch (error) {
         alert('관리자에게 문의주세요.')
@@ -25,6 +32,10 @@ const TipDetailPage = () => {
 
     requestTip()
   }, [])
+
+  useEffect(() => {
+    setCanEdit(tip?.writer.email === authStore.member?.email)
+  }, [tip, authStore.member])
 
   const handleDelete = async () => {
     try {
@@ -56,10 +67,12 @@ const TipDetailPage = () => {
         </Typography>
         <Typography>{tip.content}</Typography>
         <Box display="flex" gap={2}>
-          <Link to={`/tips/${tip.id}/edit`}>
-            <Button variant="outlined">수정</Button>
-          </Link>
-          <DeleteButton onConfirm={handleDelete} />
+          {canEdit && (
+            <Link to={`/tips/${tip.id}/edit`}>
+              <Button variant="outlined">수정</Button>
+            </Link>
+          )}
+          {canEdit && <DeleteButton onConfirm={handleDelete} />}
           <Link to="/tips">
             <Button variant="outlined">목록</Button>
           </Link>

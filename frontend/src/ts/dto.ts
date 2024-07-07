@@ -42,6 +42,7 @@ export interface TipResponseDTO {
   id: string
   title: string
   content: string
+  writer: MemberResponse
   updatedAt: string
   createdAt: string
 }

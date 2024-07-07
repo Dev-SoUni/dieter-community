@@ -19,14 +19,18 @@ class AuthenticationService(
         password: String,
     ): AuthenticationResponse {
 
-        val user = memberRepository.findByEmail(email) ?: throw CustomException(HttpStatus.BAD_REQUEST, "해당 이메일을 찾을 수 없습니다.")
+        val member = memberRepository.findByEmail(email) ?: throw CustomException(HttpStatus.BAD_REQUEST, "해당 이메일을 찾을 수 없습니다.")
 
-        if (!passwordEncoder.matches(password, user.password)) {
+        if (!passwordEncoder.matches(password, member.password)) {
             throw CustomException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.")
         }
 
-        val accessToken = tokenService.generate(user)
+        val accessToken = tokenService.generate(member)
 
-        return AuthenticationResponse(accessToken)
+        return AuthenticationResponse(
+            email = member.email,
+            nickname = member.nickname,
+            accessToken = accessToken
+        )
     }
 }
