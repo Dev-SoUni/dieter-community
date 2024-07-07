@@ -11,6 +11,7 @@ import TipPage from './pages/TipPage.tsx'
 import TipNewPage from './pages/TipNewPage.tsx'
 import TipDetailPage from './pages/TipDetailPage.tsx'
 import TipEditPage from './pages/TipEditPage.tsx'
+import { AuthRoute } from './components/AuthRoute.tsx'
 import { MemberResponse } from './ts/dto.ts'
 
 const router = createBrowserRouter([
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/tips/new',
-        element: <TipNewPage />,
+        element: <AuthRoute component={TipNewPage} />,
       },
       {
         path: '/tips/:id',
@@ -40,7 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/tips/:id/edit',
-        element: <TipEditPage />,
+        element: <AuthRoute component={TipEditPage} />,
       },
     ],
   },
