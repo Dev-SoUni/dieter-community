@@ -1,5 +1,6 @@
 package com.devsy.dieter_community.controller
 
+import com.devsy.dieter_community.domain.Member
 import com.devsy.dieter_community.domain.Tip
 import com.devsy.dieter_community.dto.TipPatchDTO
 import com.devsy.dieter_community.dto.TipPostDTO
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 
 
@@ -48,11 +51,14 @@ class TipController(
 
     @PostMapping("")
     fun postTip(
+        @AuthenticationPrincipal member: Member,
         @RequestBody requestBody: TipPostDTO,
     ): ResponseEntity<Tip> {
+        print("member $member")
         val postedTip = tipService.post(
-            requestBody.title,
-            requestBody.content,
+            title = requestBody.title,
+            writer = member,
+            content = requestBody.content,
         )
 
         return ResponseEntity.ok(postedTip)

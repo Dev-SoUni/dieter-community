@@ -1,6 +1,6 @@
 package com.devsy.dieter_community.service
 
-import io.jsonwebtoken.JwtException
+import io.jsonwebtoken.Claims
 import io.jsonwebtoken.JwtParser
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
@@ -27,31 +27,26 @@ class TokenService(
         return Jwts.builder()
             .subject(userDetails.username)
             .issuedAt(Date(System.currentTimeMillis()))
-            .expiration(Date(expirationTime))
+            .expiration(Date(System.currentTimeMillis() + expirationTime))
             .signWith(this.key)
             .compact()
     }
 
-    fun isValid(token: String): Boolean {
-        val parser = getParser()
+    fun isValid(
+        token: String,
+        userDetails: UserDetails,
+    ): Boolean {
+        val email = extractEmail(token)
 
-        try {
-            parser.parseSignedClaims(token)
-            return true
-        } catch (ex: Exception) {
-            return when(ex){
-                is JwtException, is IllegalArgumentException -> {
-                    false
-                }
-                else -> {
-                    false
-                }
-            }
-        }
+        return userDetails.username == email && !isExpired(token)
     }
 
-    private fun getParser(): JwtParser {
-        return Jwts.parser().verifyWith(this.key).build()
-    }
+    fun extractEmail(token: String): String? = getAllClaims(token).subject
+
+    fun isExpired(token: String): Boolean = getAllClaims(token).expiration.before(Date(System.currentTimeMillis()))
+
+    private fun getParser(): JwtParser = Jwts.parser().verifyWith(this.key).build()
+
+    private fun getAllClaims(token: String): Claims = getParser().parseSignedClaims(token).payload
 
 }

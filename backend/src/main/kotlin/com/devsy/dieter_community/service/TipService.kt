@@ -1,5 +1,6 @@
 package com.devsy.dieter_community.service
 
+import com.devsy.dieter_community.domain.Member
 import com.devsy.dieter_community.domain.Tip
 import com.devsy.dieter_community.repository.TipRepository
 import org.springframework.data.domain.Page
@@ -38,11 +39,13 @@ class TipService (
 
     fun post(
         title: String,
+        writer: Member,
         content: String,
     ): Tip {
 
         val tip = Tip(
             title = title,
+            writer = writer,
             content = content,
         )
 

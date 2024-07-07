@@ -32,6 +32,9 @@ class Member(
     @Column(name = "password")
     private val password: String = password
 
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
+    private val tips: List<Tip> = listOf()
+
     @Column(name = "updated_at")
     @LastModifiedDate
     lateinit var updatedAt: LocalDateTime

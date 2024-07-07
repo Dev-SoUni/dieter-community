@@ -12,6 +12,7 @@ import java.util.UUID
 @EntityListeners(AuditingEntityListener::class)
 class Tip(
     title: String,
+    writer: Member,
     content: String,
 ) {
 
@@ -25,8 +26,9 @@ class Tip(
     @Column(name = "content")
     var content: String = content
 
-    @Column(name = "writer_id")
-    val writerId: Long? = null
+    @JoinColumn(name = "writer_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    var writer: Member = writer
 
     @Column(name = "updated_at")
     @LastModifiedDate
