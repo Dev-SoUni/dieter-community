@@ -4,7 +4,7 @@ import com.devsy.dieter_community.domain.Member
 import com.devsy.dieter_community.domain.Tip
 import com.devsy.dieter_community.dto.TipPatchDTO
 import com.devsy.dieter_community.dto.TipPostDTO
-import com.devsy.dieter_community.dto.TipResponseDTO
+import com.devsy.dieter_community.dto.TipResponse
 import com.devsy.dieter_community.exception.CustomException
 import com.devsy.dieter_community.service.TipService
 import org.springframework.data.domain.Page
@@ -14,7 +14,6 @@ import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 
 
@@ -29,12 +28,12 @@ class TipController(
         @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable,
         @RequestParam(name = "title", defaultValue = "", required = false) title: String,
         @RequestParam(name = "page", defaultValue = "0", required = false) page: Int
-    ): ResponseEntity<Page<TipResponseDTO>> {
+    ): ResponseEntity<Page<TipResponse>> {
         return ResponseEntity.ok(
             tipService
                 .findByTitle(pageable, title)
                 .map {
-                    TipResponseDTO(it)
+                    TipResponse(it)
                 }
         )
     }
@@ -42,10 +41,10 @@ class TipController(
     @GetMapping("/{id}")
     fun getTip(
         @PathVariable(name = "id") id: String,
-    ): ResponseEntity<TipResponseDTO> {
+    ): ResponseEntity<TipResponse> {
         val tip = tipService.findById(id) ?: throw CustomException(HttpStatus.NOT_FOUND, "해당 꿀팁을 찾을 수 없습니다.")
         return ResponseEntity.ok(
-            TipResponseDTO(tip)
+            TipResponse(tip)
         )
     }
 
