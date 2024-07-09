@@ -1,11 +1,12 @@
 package com.devsy.dieter_community.controller
 
 import com.devsy.dieter_community.domain.Member
-import com.devsy.dieter_community.domain.Tip
-import com.devsy.dieter_community.dto.TipPatchDTO
-import com.devsy.dieter_community.dto.TipPostDTO
+import com.devsy.dieter_community.dto.TipPatchRequest
+import com.devsy.dieter_community.dto.TipPostRequest
 import com.devsy.dieter_community.dto.TipResponse
 import com.devsy.dieter_community.exception.CustomException
+import com.devsy.dieter_community.mapper.toDomain
+import com.devsy.dieter_community.mapper.toResponse
 import com.devsy.dieter_community.service.TipService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -28,61 +29,52 @@ class TipController(
         @PageableDefault(page = 0, size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable,
         @RequestParam(name = "title", defaultValue = "", required = false) title: String,
         @RequestParam(name = "page", defaultValue = "0", required = false) page: Int
-    ): ResponseEntity<Page<TipResponse>> {
-        return ResponseEntity.ok(
-            tipService
-                .findByTitle(pageable, title)
-                .map {
-                    TipResponse(it)
-                }
-        )
-    }
+    ): Page<TipResponse> =
+        tipService
+            .findByTitle(pageable, title)
+            .map { it.toResponse() }
 
     @GetMapping("/{id}")
     fun getTip(
         @PathVariable(name = "id") id: String,
-    ): ResponseEntity<TipResponse> {
-        val tip = tipService.findById(id) ?: throw CustomException(HttpStatus.NOT_FOUND, "해당 꿀팁을 찾을 수 없습니다.")
-        return ResponseEntity.ok(
-            TipResponse(tip)
-        )
-    }
+    ): TipResponse =
+        tipService.findById(id)
+            ?.toResponse()
+            ?: throw CustomException(HttpStatus.NOT_FOUND, "해당 꿀팁을 찾을 수 없습니다.")
 
     @PostMapping("")
     fun postTip(
         @AuthenticationPrincipal member: Member,
-        @RequestBody requestBody: TipPostDTO,
-    ): ResponseEntity<Tip> {
-        print("member $member")
-        val postedTip = tipService.post(
-            title = requestBody.title,
-            writer = member,
-            content = requestBody.content,
+        @RequestBody requestBody: TipPostRequest,
+    ): TipResponse =
+        tipService.post(
+            requestBody.toDomain(writer = member),
         )
-
-        return ResponseEntity.ok(postedTip)
-    }
+            ?.toResponse()
+            ?: throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 등록에 실패했습니다.")
 
     @PatchMapping("/{id}")
     fun patchTip(
         @PathVariable(name = "id") id: String,
-        @RequestBody requestBody: TipPatchDTO,
-    ): ResponseEntity<Tip> {
-        val patchedTip = tipService.patch(
+        @RequestBody requestBody: TipPatchRequest,
+    ): TipResponse =
+        tipService.patch(
             id = id,
             title = requestBody.title,
             content = requestBody.content,
         )
-
-        return ResponseEntity.ok(patchedTip)
-    }
+            ?.toResponse()
+            ?: throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 수정에 실패했습니다.")
 
     @DeleteMapping("/{id}")
     fun deleteTip(
-     @PathVariable(name = "id") id: String
-    ): ResponseEntity<HttpStatus> {
-        tipService.delete(id)
+     @PathVariable(name = "id") id: String,
+    ): ResponseEntity<Boolean> {
+        val success = tipService.delete(id)
 
-        return ResponseEntity(HttpStatus.NO_CONTENT)
+        return if (success)
+            ResponseEntity.noContent().build()
+        else
+            throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 삭제에 실패했습니다.")
     }
 }

@@ -1,10 +1,10 @@
 @id = 1c3d9f35-d6ea-4e4e-8315-8efe59225427
 
-### 팁 전체 조회
+### 꿀팁 전체 조회
 GET http://localhost:8080/api/tips
 
 ### 꿀팁 검색 (제목)
-GET http://localhost:8080/api/tips?title=제목9
+GET http://localhost:8080/api/tips?title=갓댐
 
 ### 팁 조회
 GET http://localhost:8080/api/tips/{{id}}

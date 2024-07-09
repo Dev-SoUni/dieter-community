@@ -1,6 +1,5 @@
 package com.devsy.dieter_community.dto
 
-import com.devsy.dieter_community.domain.Tip
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDateTime
 

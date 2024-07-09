@@ -1,6 +1,6 @@
 package com.devsy.dieter_community.dto
 
-data class TipPatchDTO(
+data class TipPatchRequest(
     val title: String?,
     val content: String?,
 )

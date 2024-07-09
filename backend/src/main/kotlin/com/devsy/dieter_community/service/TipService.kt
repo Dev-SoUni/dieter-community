@@ -1,6 +1,5 @@
 package com.devsy.dieter_community.service
 
-import com.devsy.dieter_community.domain.Member
 import com.devsy.dieter_community.domain.Tip
 import com.devsy.dieter_community.repository.TipRepository
 import org.springframework.data.domain.Page
@@ -28,8 +27,8 @@ class TipService (
         id: String,
         title: String?,
         content: String?,
-    ): Tip {
-        val tip = tipRepository.findByIdOrNull(id) ?: throw NullPointerException("해당 ${id}의 팁 게시물을 찾을 수 없습니다.")
+    ): Tip? {
+        val tip = tipRepository.findByIdOrNull(id) ?: return null
 
         if (title != null) tip.title = title
         if (content != null) tip.content = content
@@ -37,26 +36,9 @@ class TipService (
         return tipRepository.save(tip)
     }
 
-    fun post(
-        title: String,
-        writer: Member,
-        content: String,
-    ): Tip {
+    fun post(tip: Tip): Tip? =
+        runCatching { tipRepository.save(tip) }.getOrNull()
 
-        val tip = Tip(
-            title = title,
-            writer = writer,
-            content = content,
-        )
-
-        return tipRepository.save(tip)
-    }
-
-    fun delete(
-        id: String
-    ) {
-        val tip = tipRepository.findByIdOrNull(id) ?: throw NullPointerException("해당 ${id}의 팁 게시물을 찾을 수 없습니다.")
-
-        tipRepository.delete(tip)
-    }
+    fun delete(id: String): Boolean =
+        runCatching { tipRepository.deleteById(id) }.isSuccess
 }
