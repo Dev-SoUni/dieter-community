@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=PostgreSQL
+    username: SA
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+
+# 나의 환경 변수
+jwt:
+  secret: 2y2zQFGwJEL/3rbzg+mqBHPYP5wQqn/vG/MCTqVKgBw=
+  expiration_time: 3600000 # 1시간
