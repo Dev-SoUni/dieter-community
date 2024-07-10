@@ -1,6 +1,6 @@
 package com.devsy.dieter_community.exception
 
-import com.devsy.dieter_community.dto.ErrorResponseDTO
+import com.devsy.dieter_community.dto.ErrorResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -18,7 +18,7 @@ class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
         response: HttpServletResponse,
         authException: AuthenticationException,
     ) {
-        val error = ErrorResponseDTO(
+        val error = ErrorResponse(
             status = HttpStatus.UNAUTHORIZED.value(),
             message = "API 이용에 대한 인증에 실패했습니다.",
         )

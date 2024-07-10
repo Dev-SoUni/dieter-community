@@ -1,6 +1,6 @@
 package com.devsy.dieter_community.exception
 
-import com.devsy.dieter_community.dto.ErrorResponseDTO
+import com.devsy.dieter_community.dto.ErrorResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -11,11 +11,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 class GlobalException : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(CustomException::class)
-    fun handleCustomException(e: CustomException): ResponseEntity<ErrorResponseDTO> {
+    fun handleCustomException(e: CustomException): ResponseEntity<ErrorResponse> {
         return ResponseEntity
             .status(e.status)
             .body(
-                ErrorResponseDTO(
+                ErrorResponse(
                     e.status.value(),
                     e.message,
                 )
@@ -23,11 +23,11 @@ class GlobalException : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(Exception::class)
-    fun handleException(e: Exception): ResponseEntity<ErrorResponseDTO> {
+    fun handleException(e: Exception): ResponseEntity<ErrorResponse> {
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(
-                ErrorResponseDTO(
+                ErrorResponse(
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "내부 서버 오류"
                 )

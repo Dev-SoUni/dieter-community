@@ -1,6 +1,6 @@
 package com.devsy.dieter_community.exception
 
-import com.devsy.dieter_community.dto.ErrorResponseDTO
+import com.devsy.dieter_community.dto.ErrorResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -18,7 +18,7 @@ class CustomAccessDeniedHandler : AccessDeniedHandler {
         response: HttpServletResponse,
         accessDeniedException: AccessDeniedException,
     ) {
-        val error = ErrorResponseDTO(
+        val error = ErrorResponse(
             status = HttpStatus.FORBIDDEN.value(),
             message = "API 이용에 대한 인가에 실패했습니다.",
         )
