@@ -7,8 +7,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 @Entity
 @Table(name = "member")
@@ -30,7 +31,7 @@ class Member(
     val nickname: String = nickname
 
     @Column(name = "password")
-    private val password: String = password
+    private var password: String = password
 
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
     private val tips: List<Tip> = listOf()
@@ -55,6 +56,10 @@ class Member(
 
     override fun getPassword(): String {
         return this.password
+    }
+
+    fun encodePassword(passwordEncoder: PasswordEncoder) {
+        this.password = passwordEncoder.encode(this.password)
     }
 
     @PrePersist

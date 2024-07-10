@@ -2,8 +2,10 @@ package com.devsy.dieter_community.controller
 
 import com.devsy.dieter_community.dto.MemberPostRequest
 import com.devsy.dieter_community.dto.MemberResponse
+import com.devsy.dieter_community.mapper.toDomain
+import com.devsy.dieter_community.mapper.toResponse
 import com.devsy.dieter_community.service.MemberService
-import org.springframework.web.bind.annotation.GetMapping
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,17 +19,7 @@ class MemberController(
 
     @PostMapping
     fun postMember(
-        @RequestBody requestBody: MemberPostRequest
-    ): MemberResponse {
-        val postedMember = memberService.post(
-            requestBody.email,
-            requestBody.nickname,
-            requestBody.password,
-        )
-
-        return MemberResponse(
-            email = postedMember.email,
-            nickname = postedMember.nickname,
-        )
-    }
+        @RequestBody @Valid requestBody: MemberPostRequest,
+    ): MemberResponse =
+        memberService.post(requestBody.toDomain()).toResponse()
 }

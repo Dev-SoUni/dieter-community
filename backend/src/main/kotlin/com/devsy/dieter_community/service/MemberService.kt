@@ -13,18 +13,19 @@ class MemberService(
     private val memberRepository: MemberRepository,
 ) {
 
-    fun post(
-        email: String,
-        nickname: String,
-        password: String,
-    ): Member {
-        memberRepository.findByEmail(email) ?: CustomException(HttpStatus.BAD_REQUEST, "해당 이메일은 사용 중입니다.")
+    fun post(member: Member): Member {
+        val found = memberRepository.findByEmail(member.email)
 
-        val member = Member(
-            email = email,
-            nickname = nickname,
-            password = passwordEncoder.encode(password)
-        )
-        return memberRepository.save(member)
+        if (found != null) {
+            throw CustomException(HttpStatus.BAD_REQUEST, "해당 이메일은 사용 중입니다.")
+        }
+
+        member.encodePassword(passwordEncoder)
+
+        return runCatching {
+            memberRepository.save(member)
+        }.getOrElse {
+            throw CustomException(HttpStatus.BAD_REQUEST, "회원가입에 실패했습니다.")
+        }
     }
 }
