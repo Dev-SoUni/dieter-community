@@ -6,9 +6,9 @@
 
 ### 🛠️ 기술스택
 
-- `Kotlin` `Spring Boot` `Spring Security`
+- `Kotlin` `Spring Boot` `Spring Security` `Spring Validation` `JUnit`
 - `TypeScript` `React` `Redux` `Axios` `MUI`
-- `PostgreSQL` `JPA`
+- `PostgreSQL` `H2` `Redis` `JPA`
 - `Docker` `Docker Compose`
 
 ### 🏁 시작하기
