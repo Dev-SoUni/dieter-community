@@ -21,11 +21,13 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.transaction.annotation.Transactional
 import kotlin.test.Test
 import kotlin.test.fail
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@Transactional
 class TipControllerTest {
 
     @Autowired
