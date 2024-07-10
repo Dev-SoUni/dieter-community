@@ -2,14 +2,17 @@ package com.devsy.dieter_community.config.security
 
 import com.devsy.dieter_community.exception.CustomAccessDeniedHandler
 import com.devsy.dieter_community.exception.CustomAuthenticationEntryPoint
+import com.devsy.dieter_community.filter.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.invoke
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 // Spring Security
 //
@@ -28,7 +31,10 @@ class SecurityConfig {
     }
 
     @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain {
+    fun filterChain(
+        http: HttpSecurity,
+        jwtAuthenticationFilter: JwtAuthenticationFilter,
+    ): SecurityFilterChain {
         http {
             csrf { disable() }
             cors { }
@@ -36,11 +42,17 @@ class SecurityConfig {
                 authorize(HttpMethod.POST, "/api/tips", authenticated)
                 authorize("/api/**", permitAll)
             }
+            sessionManagement {
+                sessionCreationPolicy = SessionCreationPolicy.STATELESS
+            }
             exceptionHandling {
                 authenticationEntryPoint = customAuthenticationEntryPoint
                 accessDeniedHandler = customAccessDeniedHandler
             }
         }
+
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+
         return http.build()
 
     }
