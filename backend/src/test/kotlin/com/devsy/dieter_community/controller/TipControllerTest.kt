@@ -2,16 +2,19 @@ package com.devsy.dieter_community.controller
 
 import com.devsy.dieter_community.domain.Member
 import com.devsy.dieter_community.domain.Tip
+import com.devsy.dieter_community.dto.TipPatchRequest
 import com.devsy.dieter_community.dto.TipPostRequest
 import com.devsy.dieter_community.repository.MemberRepository
 import com.devsy.dieter_community.repository.TipRepository
 import com.devsy.dieter_community.service.TokenService
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -19,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import kotlin.test.Test
+import kotlin.test.fail
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -32,6 +36,9 @@ class TipControllerTest {
 
     @Autowired
     private lateinit var tokenService: TokenService
+
+    @Autowired
+    private lateinit var tipRepository: TipRepository
 
     @Test
     @DisplayName("꿀팁 게시물 전체 조회")
@@ -152,6 +159,132 @@ class TipControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("\$.content").value(requestBody.content))
             .andExpect(MockMvcResultMatchers.jsonPath("\$.writer.email").value(member.email))
             .andExpect(MockMvcResultMatchers.jsonPath("\$.writer.nickname").value(member.nickname))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    @DisplayName("꿀팁 수정 : 미로그인 상태")
+    fun 꿀팁_수정_미로그인_상태() {
+        // Given
+        val tip = tips[0]
+        val requestBody = TipPatchRequest(title = "꿀팁(Update)", content = "내용(Update)")
+
+        // When
+        val resultActions = mock.perform(
+            MockMvcRequestBuilders
+                .patch("/api/tips/${tip.id}")
+                .content(mapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+
+        // Then
+        resultActions
+            .andExpect(MockMvcResultMatchers.status().isUnauthorized)
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.status").value(HttpStatus.UNAUTHORIZED.value()))
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.message").value("API 이용에 대한 인증에 실패했습니다."))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    @DisplayName("꿀팁 수정 : 꿀팁 ID가 존재하지 않는 경우")
+    fun 꿀팁_수정_존재하지_않는_ID() {
+        // Given
+        val id = "wrong_post_id"
+        val accessToken = tokenService.generate(member)
+        val requestBody = TipPatchRequest(title = "꿀팁(Update)", content = "내용(Update)")
+
+        // When
+        val resultActions = mock.perform(
+            MockMvcRequestBuilders
+                .patch("/api/tips/$id")
+                .header("Authorization", "Bearer $accessToken")
+                .content(mapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+
+        // Then
+        resultActions
+            .andExpect(MockMvcResultMatchers.status().isBadRequest)
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.status").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.message").value("꿀팁 수정에 실패했습니다."))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    fun 꿀팁_수정() {
+        // Given
+        val id = tips[0].id ?: fail("꿀팁을 찾을 수 없음")
+        val accessToken = tokenService.generate(member)
+        val requestBody = TipPatchRequest(title = "꿀팁(Update)", content = "내용(Update)")
+
+        // When
+        val resultActions = mock.perform(
+            MockMvcRequestBuilders
+                .patch("/api/tips/$id")
+                .header("Authorization", "Bearer $accessToken")
+                .content(mapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+
+        // Then
+        resultActions
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(requestBody.title))
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.content").value(requestBody.content))
+            .andDo(MockMvcResultHandlers.print())
+
+        val found = tipRepository.findByIdOrNull(id)
+        assertThat(found).isNotNull()
+        assertThat(found?.title).isEqualTo(requestBody.title)
+        assertThat(found?.content).isEqualTo(requestBody.content)
+    }
+
+    @Test
+    @DisplayName("꿀팁 삭제 : 미로그인 상태")
+    fun 꿀팁_삭제_미로그인_상태() {
+        // Given
+        val id = tips[0].id ?: fail("꿀팁을 찾을 수 없음")
+
+        // When
+        val resultActions = mock.perform(
+            MockMvcRequestBuilders
+                .delete("/api/tips/$id")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+
+        // Then
+        resultActions
+            .andExpect(MockMvcResultMatchers.status().isUnauthorized)
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.status").value(HttpStatus.UNAUTHORIZED.value()))
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.message").value("API 이용에 대한 인증에 실패했습니다."))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    @DisplayName("꿀팁 삭제 : 꿀팁 ID가 존재하지 않는 경우")
+    fun 꿀팁_삭제_존재하지_않는_ID() {
+        // Given
+        val id = "wrong_post_id"
+        val accessToken = tokenService.generate(member)
+
+        // When
+        val resultActions = mock.perform(
+            MockMvcRequestBuilders
+                .delete("/api/tips/$id")
+                .header("Authorization", "Bearer $accessToken")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+
+        // Then
+        resultActions
+            .andExpect(MockMvcResultMatchers.status().isBadRequest)
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.status").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.message").value("꿀팁 삭제에 실패했습니다."))
             .andDo(MockMvcResultHandlers.print())
     }
 
