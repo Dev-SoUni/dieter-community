@@ -39,6 +39,12 @@ class TipService (
     fun post(tip: Tip): Tip? =
         runCatching { tipRepository.save(tip) }.getOrNull()
 
-    fun delete(id: String): Boolean =
-        runCatching { tipRepository.deleteById(id) }.isSuccess
+    fun delete(id: String): Boolean {
+        val found = tipRepository.findByIdOrNull(id)
+
+        return found?.let {
+            tipRepository.delete(found)
+            true
+        } ?: false
+    }
 }
