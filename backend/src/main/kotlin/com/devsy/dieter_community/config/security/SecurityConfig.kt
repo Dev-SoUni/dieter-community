@@ -33,6 +33,7 @@ class SecurityConfig {
             csrf { disable() }
             cors { }
             authorizeRequests {
+                authorize(HttpMethod.POST, "/api/tips", authenticated)
                 authorize("/api/**", permitAll)
             }
             exceptionHandling {
