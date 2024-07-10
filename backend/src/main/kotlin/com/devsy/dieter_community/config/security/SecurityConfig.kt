@@ -40,6 +40,8 @@ class SecurityConfig {
             cors { }
             authorizeRequests {
                 authorize(HttpMethod.POST, "/api/tips", authenticated)
+                authorize(HttpMethod.PATCH, "/api/tips/**", authenticated)
+                authorize(HttpMethod.DELETE, "/api/tips/**", authenticated)
                 authorize("/api/**", permitAll)
             }
             sessionManagement {
