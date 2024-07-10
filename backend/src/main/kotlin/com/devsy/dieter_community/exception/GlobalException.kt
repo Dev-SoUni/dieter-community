@@ -22,7 +22,6 @@ class GlobalException : ResponseEntityExceptionHandler() {
             )
     }
 
-
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception): ResponseEntity<ErrorResponseDTO> {
         return ResponseEntity
@@ -34,5 +33,4 @@ class GlobalException : ResponseEntityExceptionHandler() {
                 )
             )
     }
-
 }

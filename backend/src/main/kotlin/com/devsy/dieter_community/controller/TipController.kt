@@ -68,7 +68,7 @@ class TipController(
 
     @DeleteMapping("/{id}")
     fun deleteTip(
-     @PathVariable(name = "id") id: String,
+        @PathVariable(name = "id") id: String,
     ): ResponseEntity<Boolean> {
         val success = tipService.delete(id)
 
