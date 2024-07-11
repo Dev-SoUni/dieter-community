@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.AdditionalAnswers
 import org.mockito.ArgumentMatchers.any
-import org.mockito.BDDMockito.given
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -86,7 +85,7 @@ class TipServiceMockTest {
         inner class SuccessCase {
 
             @Test
-            @DisplayName("patch() : `Title` 값만 수정하는 경우")
+            @DisplayName("patch() : 성공")
             fun patch() {
                 // Given
                 val id = "uuid"
@@ -95,13 +94,14 @@ class TipServiceMockTest {
 
                 // When
                 findByIdSuccessMocking(id)
-                Mockito.`when`(tipRepository.save(any(Tip::class.java))).then(AdditionalAnswers.returnsFirstArg<Tip>())
+                saveSuccessMocking()
 
                 val tip = tipService.patch(id, title, content)
 
                 // Then
                 assertThat(tip).isNotNull()
                 assertThat(tip?.title).isEqualTo(title)
+                assertThat(tip?.content).isEqualTo("내용")
             }
         }
 
@@ -117,7 +117,7 @@ class TipServiceMockTest {
                 val title = "제목(수정)"
                 val content = null
 
-                given(tipRepository.findById(id)).willReturn(Optional.empty())
+                Mockito.`when`(tipRepository.findById(id)).thenReturn(Optional.empty())
 
                 // When
                 val patched = tipService.patch(id = id, title = title, content = content)
@@ -128,18 +128,121 @@ class TipServiceMockTest {
         }
     }
 
+    @Nested
+    @DisplayName("게시물 등록")
+    inner class Post {
+
+        @Nested
+        @DisplayName("성공 케이스")
+        inner class SuccessCase {
+
+            @Test
+            @DisplayName("post() : 성공")
+            fun post() {
+                // Given
+                val tip = generateTip()
+
+                // When
+                saveSuccessMocking()
+
+                val posted = tipService.post(tip)
+
+                // Then
+                assertThat(posted).isNotNull()
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 케이스")
+        inner class FailCase {
+
+            @Test
+            @DisplayName("post() : 실패")
+            fun post() {
+                // Given
+                val tip = generateTip()
+
+                // When
+                saveThrowMocking()
+
+                val posted = tipService.post(tip)
+
+                // Then
+                assertThat(posted).isNull()
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("게시물 삭제")
+    inner class Delete {
+
+        @Nested
+        @DisplayName("성공 케이스")
+        inner class SuccessCase {
+
+            @Test
+            @DisplayName("delete() : 성공")
+            fun delete() {
+                // Given
+                val id = "uuid"
+
+                // When
+                findByIdSuccessMocking(id)
+                Mockito.doNothing().`when`(tipRepository).delete(any(Tip::class.java))
+
+                val success = tipService.delete(id)
+
+                // Then
+                assertThat(success).isTrue()
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 케이스")
+        inner class FailCase {
+
+            @Test
+            @DisplayName("delete() : 실패")
+            fun delete() {
+                // Given
+                val id = "uuid"
+
+                // When
+                Mockito.`when`(tipRepository.findById(id)).thenReturn(Optional.empty())
+
+                val success = tipService.delete(id)
+
+                // Then
+                assertThat(success).isFalse()
+
+            }
+        }
+    }
+
+    private fun generateTip() =
+        Tip(
+            title = "제목",
+            writer = Member(email = "Lion@exmaple.com", nickname = "사자", password = ""),
+            content = "내용"
+        )
+
     private fun findByIdSuccessMocking(id: String) {
         Mockito.`when`(tipRepository.findById(id))
             .thenReturn(
                 Optional.of(
-                    Tip(
-                        title = "",
-                        writer = Member(email = "Lion@example.com", nickname = "", password = ""),
-                        content = "",
-                    ).apply {
-                        this.id = id
-                    }
+                    generateTip().apply { this.id = id }
                 )
             )
+    }
+
+    private fun saveSuccessMocking() {
+        Mockito.`when`(tipRepository.save(any(Tip::class.java)))
+            .then(AdditionalAnswers.returnsFirstArg<Tip>())
+    }
+
+    private fun saveThrowMocking() {
+        Mockito.`when`(tipRepository.save(any(Tip::class.java)))
+            .thenThrow(IllegalArgumentException::class.java)
     }
 }
