@@ -8,20 +8,18 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class TipService (
+class TipService(
     val tipRepository: TipRepository
 ) {
 
     fun findByTitle(
         pageable: Pageable,
         title: String
-    ): Page<Tip> {
-        return tipRepository.findByTitleContaining(pageable, title)
-    }
+    ): Page<Tip> =
+        tipRepository.findByTitleContaining(pageable, title)
 
-    fun findById(id: String): Tip? {
-        return tipRepository.findByIdOrNull(id)
-    }
+    fun findById(id: String): Tip? =
+        tipRepository.findByIdOrNull(id)
 
     fun patch(
         id: String,
