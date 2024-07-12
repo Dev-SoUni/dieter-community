@@ -12,7 +12,7 @@ class CustomUserDetailsService(
 ) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): Member {
-        return memberRepository.findByEmail(username) ?: throw UsernameNotFoundException("해당 이메일(${username})의 회원 정보를 찾을 수 없습니다.")
+        return memberRepository.findByEmail(username) ?: throw UsernameNotFoundException("해당 이메일($username)의 회원 정보를 찾을 수 없습니다.")
     }
 
 }
