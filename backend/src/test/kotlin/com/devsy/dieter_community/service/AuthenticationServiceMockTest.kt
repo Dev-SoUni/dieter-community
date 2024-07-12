@@ -7,7 +7,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.anyString
@@ -53,6 +52,7 @@ class AuthenticationServiceMockTest {
                 findByEmailSuccessMocking(email, nickname, password)
                 Mockito.`when`(passwordEncoder.matches(anyString(), anyString()))
                     .thenReturn(true)
+
                 Mockito.`when`(tokenService.generate(any()))
                     .thenReturn("AccessToken")
 
