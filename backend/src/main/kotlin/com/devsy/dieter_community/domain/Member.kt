@@ -36,6 +36,9 @@ class Member(
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
     private val tips: List<Tip> = listOf()
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private val tipLike: List<TipLike> = listOf()
+
     @Column(name = "updated_at")
     @LastModifiedDate
     lateinit var updatedAt: LocalDateTime

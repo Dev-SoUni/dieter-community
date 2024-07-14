@@ -4,14 +4,14 @@ import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 @Entity
 @Table(name = "tip_like")
 @EntityListeners(AuditingEntityListener::class)
 class TipLike(
     tipId: String,
-    memberId: String,
+    member: Member,
 ) {
 
     @Id
@@ -21,8 +21,9 @@ class TipLike(
     @Column(name = "tip_id")
     val tipId: String = tipId
 
-    @Column(name = "member_id")
-    val memberId: String = memberId
+    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    val member: Member = member
 
     @Column(name = "created_at")
     @CreatedDate
