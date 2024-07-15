@@ -58,6 +58,8 @@ class TipLikeServiceMockTest {
                             }
                         )
                     )
+                Mockito.`when`(tipLikeRepository.findByTipAndMember(tip = org.mockito.kotlin.any(), member = org.mockito.kotlin.any()))
+                    .thenReturn(null)
                 Mockito.`when`(tipLikeRepository.save(any(TipLike::class.java)))
                     .then(AdditionalAnswers.returnsFirstArg<TipLike>())
 
@@ -72,6 +74,43 @@ class TipLikeServiceMockTest {
 
         @Nested
         @DisplayName("실패 케이스")
-        inner class FailCase {}
+        inner class FailCase {
+
+            @Test
+            @DisplayName("post() : 해당 꿀팁 게시물이 없는 경우")
+            fun post_해당_꿀팁_게시물이_없는_경우() {
+                // Given
+                val tipId = "no-exist"
+                val member = generateMember(email = "Lion@example.com", nickname = "사자")
+
+                // When
+                Mockito.`when`(tipRepository.findById(tipId)).thenReturn(Optional.empty())
+
+                val posted = tipLikeService.post(tipId = tipId, member = member)
+
+                // Then
+                assertThat(posted).isNull()
+            }
+
+            @Test
+            @DisplayName("post() : 이미 좋아요가 된 꿀팁일 경우")
+            fun post_이미_좋아요가_된_꿀팁일_경우() {
+                // Given
+                val tip = Tip(title = "", writer = generateMember(email = "", nickname = ""), content = "")
+                val tipId = "tip-id"
+                val member = generateMember(email = "Lion@example.com", nickname = "사자")
+
+                // When
+                Mockito.`when`(tipRepository.findById(tipId))
+                    .thenReturn(Optional.of(tip))
+                Mockito.`when`(tipLikeRepository.findByTipAndMember(tip = org.mockito.kotlin.any(), member = org.mockito.kotlin.any()))
+                    .thenReturn(TipLike(tip = tip, member = member))
+
+                val posted = tipLikeService.post(tipId = tipId, member = member)
+
+                // Then
+                assertThat(posted).isNull()
+            }
+        }
     }
 }
