@@ -17,6 +17,10 @@ class TipLikeService(
         val tip = tipRepository.findByIdOrNull(tipId) ?: return null
         val tipLike = TipLike(tip = tip, member = member)
 
+        // 해당 게시물에 이미 좋아요가 되어있다면 불가능
+        val found = tipLikeRepository.findByTipAndMember(tip = tip, member = member)
+        if (found != null) return null
+
         return runCatching {
             tipLikeRepository.save(tipLike)
         }.getOrNull()
