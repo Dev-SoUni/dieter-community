@@ -10,7 +10,7 @@ import java.util.*
 @Table(name = "tip_like")
 @EntityListeners(AuditingEntityListener::class)
 class TipLike(
-    tipId: String,
+    tip: Tip,
     member: Member,
 ) {
 
@@ -18,8 +18,9 @@ class TipLike(
     @Column(name = "id")
     var id: String? = null
 
-    @Column(name = "tip_id")
-    val tipId: String = tipId
+    @JoinColumn(name = "tip_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    val tip: Tip = tip
 
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)

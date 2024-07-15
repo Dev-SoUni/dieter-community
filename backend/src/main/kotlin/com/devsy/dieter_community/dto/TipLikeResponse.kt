@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 data class TipLikeResponse(
     val id: String,
-    val tipId: String,
+    val tip: TipResponse,
     val member: MemberResponse,
     @JsonFormat(pattern = "yyyy.MM.dd") val createdAt: LocalDateTime,
 )

@@ -5,7 +5,7 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 @Entity
 @Table(name = "tip")
@@ -30,6 +30,9 @@ class Tip(
     @ManyToOne(fetch = FetchType.LAZY)
     var writer: Member = writer
 
+    @OneToMany(mappedBy = "tip", fetch = FetchType.LAZY)
+    val likes: List<TipLike> = listOf()
+
     @Column(name = "updated_at")
     @LastModifiedDate
     lateinit var updatedAt: LocalDateTime
@@ -42,5 +45,4 @@ class Tip(
     fun prePersist() {
         this.id = UUID.randomUUID().toString()
     }
-
 }
