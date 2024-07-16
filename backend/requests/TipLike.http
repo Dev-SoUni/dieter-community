@@ -1,0 +1,11 @@
+@tipId = e7c0a516-b25b-4036-be07-460e4b365960
+@accessToken = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJic3kxNDgyQG5hdmVyLmNvbSIsImlhdCI6MTcyMTExNjYzNSwiZXhwIjoxNzIxMTIwMjM1fQ.1zX-7OMZ8kmgMhufGk07qAG_VJQcj_HFxN2NxR7lM6Y
+
+### 꿀팁 좋아요 등록
+POST http://localhost:8080/api/tip-likes
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "tipId": "{{tipId}}"
+}
