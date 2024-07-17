@@ -1,52 +1,62 @@
 package com.devsy.dieter_community.service
 
+import com.devsy.dieter_community.config.JwtProperties
 import io.jsonwebtoken.Claims
-import io.jsonwebtoken.JwtParser
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import java.util.*
 
-@Suppress("CanBePrimaryConstructorProperty")
 @Service
 class TokenService(
-    @Value("\${jwt.secret}")
-    secret: String,
-
-    @Value("\${jwt.expiration_time}")
-    expirationTime: Long
+    jwtProperties: JwtProperties,
 ) {
 
-    private val key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret))
-    private val expirationTime: Long = expirationTime
+    private val secretKey = Keys.hmacShaKeyFor(
+        jwtProperties.key.toByteArray()
+    )
 
-    fun generate(userDetails: UserDetails): String {
-        return Jwts.builder()
+    /**
+     * JWT 생성
+     */
+    fun generate(
+        userDetails: UserDetails,
+        expirationDate: Date,
+        additionalClaims: Map<String, Any> = emptyMap(),
+    ): String =
+        Jwts.builder()
+            .claims()
             .subject(userDetails.username)
             .issuedAt(Date(System.currentTimeMillis()))
-            .expiration(Date(System.currentTimeMillis() + expirationTime))
-            .signWith(this.key)
+            .expiration(expirationDate)
+            .add(additionalClaims)
+            .and()
+            .signWith(secretKey)
             .compact()
-    }
 
-    fun isValid(
-        token: String,
-        userDetails: UserDetails,
-    ): Boolean {
+    /**
+     * JWT 검증 및 토큰의 소유자가 일치하는지도 확인
+     */
+    fun isValid(token: String, userDetails: UserDetails): Boolean {
         val email = extractEmail(token)
 
-        return userDetails.username == email && !isExpired(token)
+        return email == userDetails.username && !isExpired(token)
     }
 
-    fun extractEmail(token: String): String? = getAllClaims(token).subject
+    fun extractEmail(token: String): String? =
+        getAllClaims(token)
+            .subject
 
-    fun isExpired(token: String): Boolean = getAllClaims(token).expiration.before(Date(System.currentTimeMillis()))
+    private fun isExpired(token: String): Boolean =
+        getAllClaims(token)
+            .expiration
+            .before(Date(System.currentTimeMillis()))
 
-    private fun getParser(): JwtParser = Jwts.parser().verifyWith(this.key).build()
-
-    private fun getAllClaims(token: String): Claims = getParser().parseSignedClaims(token).payload
-
+    private fun getAllClaims(token: String): Claims =
+        Jwts.parser()
+            .verifyWith(secretKey)
+            .build()
+            .parseSignedClaims(token)
+            .payload
 }

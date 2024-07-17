@@ -53,7 +53,7 @@ class AuthenticationServiceMockTest {
                 Mockito.`when`(passwordEncoder.matches(anyString(), anyString()))
                     .thenReturn(true)
 
-                Mockito.`when`(tokenService.generate(any()))
+                Mockito.`when`(tokenService.generate(any(), any()))
                     .thenReturn("AccessToken")
 
                 val authenticationResponse = authenticationService.authentication(email, password)

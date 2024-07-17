@@ -4,4 +4,5 @@ data class AuthenticationResponse(
     val email: String,
     val nickname: String,
     val accessToken: String,
+    val refreshToken: String,
 )

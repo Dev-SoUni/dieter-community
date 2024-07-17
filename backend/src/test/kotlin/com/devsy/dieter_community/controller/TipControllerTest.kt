@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 import kotlin.test.Test
 import kotlin.test.fail
 
@@ -140,7 +141,7 @@ class TipControllerTest {
     @DisplayName("꿀팁 등록 : 로그인한 상태")
     fun 꿀팁_등록_로그인_상태() {
         // Given
-        val accessToken = tokenService.generate(member)
+        val accessToken = createAccessToken()
         val requestBody = TipPostRequest(title = "꿀팁(New)", content = "내용(New)")
 
         // When
@@ -193,7 +194,7 @@ class TipControllerTest {
     fun 꿀팁_수정_존재하지_않는_ID() {
         // Given
         val id = "wrong_post_id"
-        val accessToken = tokenService.generate(member)
+        val accessToken = createAccessToken()
         val requestBody = TipPatchRequest(title = "꿀팁(Update)", content = "내용(Update)")
 
         // When
@@ -218,7 +219,7 @@ class TipControllerTest {
     fun 꿀팁_수정() {
         // Given
         val id = tips[0].id ?: fail("꿀팁을 찾을 수 없음")
-        val accessToken = tokenService.generate(member)
+        val accessToken = createAccessToken()
         val requestBody = TipPatchRequest(title = "꿀팁(Update)", content = "내용(Update)")
 
         // When
@@ -271,7 +272,7 @@ class TipControllerTest {
     fun 꿀팁_삭제_존재하지_않는_ID() {
         // Given
         val id = "wrong_post_id"
-        val accessToken = tokenService.generate(member)
+        val accessToken = createAccessToken()
 
         // When
         val resultActions = mock.perform(
@@ -289,6 +290,12 @@ class TipControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("\$.message").value("꿀팁 삭제에 실패했습니다."))
             .andDo(MockMvcResultHandlers.print())
     }
+
+    private fun createAccessToken() =
+        tokenService.generate(
+            userDetails = member,
+            expirationDate = Date(System.currentTimeMillis() + 360000),
+        )
 
     companion object {
 

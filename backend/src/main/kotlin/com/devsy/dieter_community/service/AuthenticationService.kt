@@ -1,36 +1,54 @@
 package com.devsy.dieter_community.service
 
+import com.devsy.dieter_community.config.JwtProperties
 import com.devsy.dieter_community.dto.AuthenticationResponse
-import com.devsy.dieter_community.exception.CustomException
-import com.devsy.dieter_community.repository.MemberRepository
-import org.springframework.http.HttpStatus
-import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class AuthenticationService(
-    private val passwordEncoder: PasswordEncoder,
+    private val authManager: AuthenticationManager,
+    private val userDetailsService: CustomUserDetailsService,
     private val tokenService: TokenService,
-    private val memberRepository: MemberRepository,
+    private val jwtProperties: JwtProperties,
 ) {
 
     fun authentication(
         email: String,
         password: String,
     ): AuthenticationResponse {
+        authManager.authenticate(
+            UsernamePasswordAuthenticationToken(email, password)
+        )
 
-        val member = memberRepository.findByEmail(email) ?: throw CustomException(HttpStatus.BAD_REQUEST, "해당 이메일을 찾을 수 없습니다.")
-
-        if (!passwordEncoder.matches(password, member.password)) {
-            throw CustomException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.")
-        }
-
-        val accessToken = tokenService.generate(member)
+        val user = userDetailsService.loadUserByUsername(email)
+        val accessToken = createAccessToken(user)
+        val refreshToken = createRefreshToken(user)
 
         return AuthenticationResponse(
-            email = member.email,
-            nickname = member.nickname,
-            accessToken = accessToken
+            email = user.email,
+            nickname = user.nickname,
+            accessToken = accessToken,
+            refreshToken = refreshToken,
         )
     }
+
+    private fun createAccessToken(user: UserDetails): String = tokenService.generate(
+        userDetails = user,
+        expirationDate = getAccessTokenExpiration(),
+    )
+
+    private fun createRefreshToken(user: UserDetails): String = tokenService.generate(
+        userDetails = user,
+        expirationDate = getRefreshTokenExpiration(),
+    )
+
+    private fun getAccessTokenExpiration(): Date =
+        Date(System.currentTimeMillis() + jwtProperties.accessTokenExpiration)
+
+    private fun getRefreshTokenExpiration(): Date =
+        Date(System.currentTimeMillis() + jwtProperties.refreshTokenExpiration)
 }
