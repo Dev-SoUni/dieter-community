@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.CookieResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import kotlin.test.Test
@@ -72,7 +73,10 @@ class AuthControllerTest {
                     .andExpect(MockMvcResultMatchers.jsonPath("\$.email").value(email))
                     .andExpect(MockMvcResultMatchers.jsonPath("\$.nickname").value("사자"))
                     .andExpect(MockMvcResultMatchers.jsonPath("\$.accessToken").isString())
-                    .andExpect(MockMvcResultMatchers.jsonPath("\$.refreshToken").isString())
+                    .andExpect(MockMvcResultMatchers.cookie().exists("refreshToken"))
+                    .andExpect(MockMvcResultMatchers.cookie().path("refreshToken", "/"))
+                    .andExpect(MockMvcResultMatchers.cookie().httpOnly("refreshToken", true))
+                    .andExpect(MockMvcResultMatchers.cookie().secure("refreshToken", true))
                     .andDo(MockMvcResultHandlers.print())
             }
         }
