@@ -9,6 +9,7 @@ export const defaultAxios = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 })
 
 defaultAxios.interceptors.request.use(
