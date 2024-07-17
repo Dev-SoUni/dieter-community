@@ -3,6 +3,7 @@ package com.devsy.dieter_community.config.security
 import com.devsy.dieter_community.exception.CustomAccessDeniedHandler
 import com.devsy.dieter_community.exception.CustomAuthenticationEntryPoint
 import com.devsy.dieter_community.filter.JwtAuthenticationFilter
+import com.devsy.dieter_community.filter.JwtExceptionFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -39,6 +40,7 @@ class SecurityConfig {
     @Bean
     fun filterChain(
         http: HttpSecurity,
+        jwtExceptionFilter: JwtExceptionFilter,
         jwtAuthenticationFilter: JwtAuthenticationFilter,
     ): SecurityFilterChain {
         http {
@@ -59,7 +61,9 @@ class SecurityConfig {
             }
         }
 
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+        http
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter::class.java)
 
         return http.build()
     }
