@@ -8,6 +8,7 @@ import com.devsy.dieter_community.exception.CustomException
 import com.devsy.dieter_community.service.AuthenticationService
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.LockedException
@@ -74,4 +75,15 @@ class AuthController(
                         )
                 }
             }
+
+    @PostMapping("/logout")
+    fun logout(response: HttpServletResponse): ResponseEntity<Unit> {
+        val cookie = authenticationService.createExpiredRefreshTokenCookie()
+
+        response.addCookie(cookie)
+
+        return ResponseEntity
+            .noContent()
+            .build()
+    }
 }

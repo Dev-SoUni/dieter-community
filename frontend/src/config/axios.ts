@@ -26,3 +26,10 @@ defaultAxios.interceptors.request.use(
     return Promise.reject(error)
   },
 )
+
+defaultAxios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.log(error)
+  },
+)

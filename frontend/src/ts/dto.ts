@@ -27,6 +27,17 @@ export interface Page<TData> {
   empty: boolean
 }
 
+export interface AuthenticationRequest {
+  email: string
+  password: string
+}
+
+export interface AuthenticateResponse {
+  email: string
+  nickname: string
+  accessToken: string
+}
+
 export interface AuthenticationResponse {
   email: string
   nickname: string

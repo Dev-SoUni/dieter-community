@@ -56,6 +56,14 @@ class AuthenticationService(
             maxAge = jwtProperties.accessTokenExpiration.toInt()
         }
 
+    fun createExpiredRefreshTokenCookie(): Cookie =
+        Cookie("refreshToken", "").apply {
+            path = "/"
+            isHttpOnly = true
+            secure = true
+            maxAge = 0
+        }
+
     private fun getAccessTokenExpiration(): Date =
         Date(System.currentTimeMillis() + jwtProperties.accessTokenExpiration)
 

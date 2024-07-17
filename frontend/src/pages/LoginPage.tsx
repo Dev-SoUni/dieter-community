@@ -8,8 +8,7 @@ import Button from '@mui/material/Button'
 
 import { useAppDispatch, useAppSelector } from '../app/hook.ts'
 import { setAccessToken, setMember } from '../features/auth/authSlice.ts'
-import { defaultAxios } from '../config/axios.ts'
-import type { AuthenticationResponse } from '../ts/dto.ts'
+import { authenticate } from '../api/auth.ts'
 
 interface FormInputs {
   email: string
@@ -43,11 +42,7 @@ const LoginPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const response = await defaultAxios.post<AuthenticationResponse>(
-        '/api/auth',
-        formInputs,
-      )
-      const { email, nickname, accessToken } = response.data
+      const { email, nickname, accessToken } = await authenticate(formInputs)
 
       window.localStorage.setItem('accessToken', accessToken)
       dispatch(setAccessToken(accessToken))
