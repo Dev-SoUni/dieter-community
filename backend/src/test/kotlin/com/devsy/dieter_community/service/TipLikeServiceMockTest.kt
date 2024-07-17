@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.AdditionalAnswers
 import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -110,6 +111,59 @@ class TipLikeServiceMockTest {
 
                 // Then
                 assertThat(posted).isNull()
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("좋아요 취소")
+    inner class Delete {
+
+        @Nested
+        @DisplayName("성공 케이스")
+        inner class SuccessCase {
+
+            @Test
+            @DisplayName("delete() : 성공")
+            fun delete_성공() {
+                // Given
+                val id = "올바른_ID"
+
+                // When
+                Mockito.`when`(tipLikeRepository.findById(anyString()))
+                    .thenReturn(
+                        Optional.of(
+                            TipLike(
+                                tip = Tip(title = "", writer = generateMember(email = "", nickname = ""), content = ""),
+                                member = generateMember(email = "", nickname = ""),
+                            )
+                        )
+                    )
+                val success = tipLikeService.delete(id)
+
+                // Then
+                assertThat(success).isTrue()
+            }
+        }
+
+        @Nested
+        @DisplayName("실패 케이스")
+        inner class FailCase {
+
+            @Test
+            @DisplayName("delete() : 좋아요가 되어 있지 않은 경우")
+            fun delete_좋아요가_되어_있지_않은_경우() {
+                // Given
+                val id = "잘못된_ID"
+
+                // When
+                Mockito.`when`(tipLikeRepository.findById(anyString()))
+                    .thenReturn(Optional.empty())
+
+                val success = tipLikeService.delete(id)
+
+                // Then
+                assertThat(success).isFalse()
             }
         }
     }
