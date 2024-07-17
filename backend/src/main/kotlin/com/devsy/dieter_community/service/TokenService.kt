@@ -45,10 +45,8 @@ class TokenService(
     }
 
     fun extractEmail(token: String): String? =
-        runCatching {
-            getAllClaims(token)
-                .subject
-        }.getOrNull()
+        getAllClaims(token)
+            .subject
 
     private fun isExpired(token: String): Boolean =
         getAllClaims(token)
