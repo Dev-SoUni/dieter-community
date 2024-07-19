@@ -16,6 +16,15 @@ class TipLikeController(
     val tipLikeService: TipLikeService,
 ) {
 
+    @GetMapping("/auth")
+    fun getTipLikeByMember(
+        @AuthenticationPrincipal member: Member,
+        @RequestParam tipId: String,
+    ): TipLikeResponse =
+        tipLikeService.getByTipAndMember(tipId = tipId, member = member)
+            ?.toResponse()
+            ?: throw CustomException(HttpStatus.NO_CONTENT, "")
+
     @PostMapping("")
     fun postTipLike(
         @AuthenticationPrincipal member: Member,
@@ -24,7 +33,6 @@ class TipLikeController(
         tipLikeService.post(tipId = requestBody.tipId, member = member)
             ?.toResponse()
             ?: throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 좋아요 등록에 실패했습니다.")
-
 
     @DeleteMapping("/{id}")
     fun deleteTipLike(
@@ -36,6 +44,5 @@ class TipLikeController(
             true
         else
             throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 좋아요 해제에 실패했습니다.")
-
     }
 }
