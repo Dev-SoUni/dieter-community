@@ -1,3 +1,6 @@
+@accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJic3kxNDgyQG5hdmVyLmNvbSIsImlhdCI6MTcyMTQ2MjU0OSwiZXhwIjoxNzIxNDYyNTUwfQ.Tx57oSfJLGeF_7EjPnGs1Da_FpNJV2fJgH0A4Rwk7Fc
+@refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJic3kxNDgyQG5hdmVyLmNvbSIsImlhdCI6MTcyMTQ2MjU0OSwiZXhwIjoxNzIxNTQ4OTQ5fQ.i4iVdsmjk_ioQq0_OTi0chpROCGFB0D60g-BwAVgvLs
+
 ### 로그인
 POST http://localhost:8080/api/auth
 Content-Type: application/json
@@ -5,4 +8,14 @@ Content-Type: application/json
 {
   "email": "bsy1482@naver.com",
   "password": "1234"
+}
+
+### 토큰 재발급
+POST http://localhost:8080/api/auth/refresh
+Authorization: Bearer {{accessToken}}
+Cookie: refreshToken={{refreshToken}};
+Content-Type: application/json
+
+{
+  "accessToken": "{{accessToken}}"
 }

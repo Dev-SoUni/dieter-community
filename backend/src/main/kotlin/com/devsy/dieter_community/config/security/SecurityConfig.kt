@@ -47,9 +47,12 @@ class SecurityConfig {
             csrf { disable() }
             cors { }
             authorizeRequests {
+                authorize("/api/auth/refresh", permitAll)
                 authorize(HttpMethod.POST, "/api/tips", authenticated)
                 authorize(HttpMethod.PATCH, "/api/tips/**", authenticated)
                 authorize(HttpMethod.DELETE, "/api/tips/**", authenticated)
+                authorize(HttpMethod.GET, "/api/tip-likes", authenticated)
+                authorize(HttpMethod.POST, "/api/tip-likes", authenticated)
                 authorize("/api/**", permitAll)
             }
             sessionManagement {

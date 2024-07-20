@@ -48,7 +48,7 @@ class TokenService(
         getAllClaims(token)
             .subject
 
-    private fun isExpired(token: String): Boolean =
+    fun isExpired(token: String): Boolean =
         getAllClaims(token)
             .expiration
             .before(Date(System.currentTimeMillis()))

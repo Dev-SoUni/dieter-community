@@ -12,6 +12,7 @@ enum class ErrorCode(
     USER_BAD_CREDENTIALS(HttpStatus.BAD_REQUEST, "이메일 또는 비밀번호가 일치하지 않습니다."),
     USER_POST_ERROR(HttpStatus.BAD_REQUEST, "회원가입에 실패했습니다."),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "해당 토큰은 만료되었습니다."),
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "리프레시 토큰을 찾을 수 없습니다."),
     TOKEN_ERROR(HttpStatus.UNAUTHORIZED, "토큰을 처리하는 중 문제가 발생했습니다."),
     TIP_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 꿀팁을 찾을 수 없습니다."),
     TIP_POST_ERROR(HttpStatus.BAD_REQUEST, "꿀팁 등록에 실패했습니다."),

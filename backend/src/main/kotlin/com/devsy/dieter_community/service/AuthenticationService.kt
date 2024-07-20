@@ -15,6 +15,7 @@ class AuthenticationService(
     private val userDetailsService: CustomUserDetailsService,
     private val tokenService: TokenService,
     private val jwtProperties: JwtProperties,
+    private val customUserDetailsService: CustomUserDetailsService,
 ) {
 
     fun authentication(
@@ -36,6 +37,18 @@ class AuthenticationService(
             accessToken = accessToken,
             refreshTokenCookie = refreshTokenCookie,
         )
+    }
+
+    fun refresh(refreshToken: String): String? {
+        val extractedEmail = tokenService.extractEmail(refreshToken)
+        return extractedEmail?.let { email ->
+            val currentUserDetails = customUserDetailsService.loadUserByUsername(username = email)
+
+            if (!tokenService.isExpired(refreshToken)) {
+                createAccessToken(currentUserDetails)
+            } else
+                null
+        }
     }
 
     private fun createAccessToken(user: UserDetails): String = tokenService.generate(

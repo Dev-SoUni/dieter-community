@@ -1,9 +1,7 @@
 package com.devsy.dieter_community.controller
 
 import com.devsy.dieter_community.domain.Member
-import com.devsy.dieter_community.dto.AuthenticateResponse
-import com.devsy.dieter_community.dto.AuthenticationRequest
-import com.devsy.dieter_community.dto.MemberResponse
+import com.devsy.dieter_community.dto.*
 import com.devsy.dieter_community.exception.CustomException
 import com.devsy.dieter_community.exception.ErrorCode
 import com.devsy.dieter_community.service.AuthenticationService
@@ -56,6 +54,20 @@ class AuthController(
                     else -> throw CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
                 }
             }
+
+    @PostMapping("/refresh")
+    fun refresh(
+        @CookieValue(name = "refreshToken", required = false) refreshToken: String?,
+    ): RefreshResponse {
+        if (refreshToken == null)
+            throw CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND)
+
+        val newAccessToken = authenticationService.refresh(
+            refreshToken = refreshToken,
+        ) ?: throw CustomException(ErrorCode.TOKEN_ERROR)
+
+        return RefreshResponse(accessToken = newAccessToken)
+    }
 
     @PostMapping("/logout")
     fun logout(response: HttpServletResponse): ResponseEntity<Unit> {

@@ -23,6 +23,11 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
+        if (request.requestURI == "/api/auth/refresh") {
+            filterChain.doFilter(request, response)
+            return
+        }
+
         val authorization = request.getHeader("Authorization")
 
         if (authorization.doesNotContainBearerToken()) {
