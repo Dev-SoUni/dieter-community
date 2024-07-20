@@ -1,6 +1,7 @@
 @id = 7d671693-d993-4c83-9c23-3ff18c0f089c
 @tipId = e7c0a516-b25b-4036-be07-460e4b365960
-@accessToken = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJic3kxNDgyQG5hdmVyLmNvbSIsImlhdCI6MTcyMTM5NTE4MiwiZXhwIjoxNzIxMzk4NzgyfQ.UaRR_fuqKGyHCTchQrn5ip0XRR3LYB8ubLd6h3JdP9A
+@accessToken = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJic3kxNDgyQG5hdmVyLmNvbSIsImlhdCI6MTcyMTQ0NDk4MSwiZXhwIjoxNzIxNDQ4NTgxfQ.EFfxrhfT2B7F2rrzxcjOarX7Y8TcDq8a80hNBtrPUUo
+
 
 ### 꿀팁 좋아요 조회
 GET http://localhost:8080/api/tip-likes/auth?tipId={{tipId}}
@@ -21,5 +22,5 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### 꿀팁 좋아요 삭제
-DELETE http://localhost:8080/api/tip-likes/{{id}}
+DELETE http://localhost:8080/api/tips/{{tipId}}/tip-likes
 Authorization: Bearer {{accessToken}}

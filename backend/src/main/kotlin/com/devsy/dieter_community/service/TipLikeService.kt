@@ -40,12 +40,16 @@ class TipLikeService(
         }.getOrNull()
     }
 
-    fun delete(id: String): Boolean {
-        val found = tipLikeRepository.findByIdOrNull(id)
+    fun deleteByTipAndMember(
+        tipId: String,
+        member: Member,
+    ): Boolean {
+        val tip = tipRepository.findByIdOrNull(tipId) ?: throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 게시물에 대한 정보를 찾을 수 없습니다.")
+        val tipLike = tipLikeRepository.findByTipAndMember(tip, member) ?: throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 게시물 좋아요에 대한 정보를 찾을 수 없습니다.")
 
-        return found?.let {
-            tipLikeRepository.delete(found)
+        return runCatching {
+            tipLikeRepository.delete(tipLike)
             true
-        } ?: false
+        }.getOrElse { false }
     }
 }

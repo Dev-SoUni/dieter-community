@@ -7,6 +7,7 @@ import com.devsy.dieter_community.dto.TipResponse
 import com.devsy.dieter_community.exception.CustomException
 import com.devsy.dieter_community.mapper.toDomain
 import com.devsy.dieter_community.mapper.toResponse
+import com.devsy.dieter_community.service.TipLikeService
 import com.devsy.dieter_community.service.TipService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/tips")
 class TipController(
     val tipService: TipService,
+    val tipLikeService: TipLikeService,
 ) {
 
     @GetMapping("")
@@ -76,5 +78,19 @@ class TipController(
             ResponseEntity.noContent().build()
         else
             throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 삭제에 실패했습니다.")
+    }
+
+    @DeleteMapping("/{id}/tip-likes")
+    fun deleteTipLike(
+        @AuthenticationPrincipal member: Member,
+        @PathVariable(name = "id") id: String,
+    ): ResponseEntity<Boolean> {
+        val success = tipLikeService.deleteByTipAndMember(id, member)
+
+        return if (success)
+            ResponseEntity.noContent()
+                .build()
+        else
+            throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 좋아요 삭제에 실패했습니다.")
     }
 }
