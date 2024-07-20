@@ -5,6 +5,7 @@ import com.devsy.dieter_community.dto.TipPatchRequest
 import com.devsy.dieter_community.dto.TipPostRequest
 import com.devsy.dieter_community.dto.TipResponse
 import com.devsy.dieter_community.exception.CustomException
+import com.devsy.dieter_community.exception.ErrorCode
 import com.devsy.dieter_community.mapper.toDomain
 import com.devsy.dieter_community.mapper.toResponse
 import com.devsy.dieter_community.service.TipLikeService
@@ -13,7 +14,6 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -42,7 +42,7 @@ class TipController(
     ): TipResponse =
         tipService.findById(id)
             ?.toResponse()
-            ?: throw CustomException(HttpStatus.NOT_FOUND, "해당 꿀팁을 찾을 수 없습니다.")
+            ?: throw CustomException(ErrorCode.TIP_NOT_FOUND)
 
     @PostMapping("")
     fun postTip(
@@ -53,7 +53,7 @@ class TipController(
             requestBody.toDomain(writer = member),
         )
             ?.toResponse()
-            ?: throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 등록에 실패했습니다.")
+            ?: throw CustomException(ErrorCode.TIP_POST_ERROR)
 
     @PatchMapping("/{id}")
     fun patchTip(
@@ -66,7 +66,7 @@ class TipController(
             content = requestBody.content,
         )
             ?.toResponse()
-            ?: throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 수정에 실패했습니다.")
+            ?: throw CustomException(ErrorCode.TIP_PATCH_ERROR)
 
     @DeleteMapping("/{id}")
     fun deleteTip(
@@ -77,7 +77,7 @@ class TipController(
         return if (success)
             ResponseEntity.noContent().build()
         else
-            throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 삭제에 실패했습니다.")
+            throw CustomException(ErrorCode.TIP_DELETE_ERROR)
     }
 
     @DeleteMapping("/{id}/tip-likes")
@@ -91,6 +91,6 @@ class TipController(
             ResponseEntity.noContent()
                 .build()
         else
-            throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 좋아요 삭제에 실패했습니다.")
+            throw CustomException(ErrorCode.TIP_LIKE_DELETE_ERROR)
     }
 }

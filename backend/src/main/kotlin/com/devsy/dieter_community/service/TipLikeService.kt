@@ -3,10 +3,10 @@ package com.devsy.dieter_community.service
 import com.devsy.dieter_community.domain.Member
 import com.devsy.dieter_community.domain.TipLike
 import com.devsy.dieter_community.exception.CustomException
+import com.devsy.dieter_community.exception.ErrorCode
 import com.devsy.dieter_community.repository.TipLikeRepository
 import com.devsy.dieter_community.repository.TipRepository
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 
 @Service
@@ -19,7 +19,7 @@ class TipLikeService(
         tipId: String,
         member: Member,
     ): TipLike? {
-        val tip = tipRepository.findByIdOrNull(tipId) ?: throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 게시물에 대한 정보를 찾을 수 없습니다.")
+        val tip = tipRepository.findByIdOrNull(tipId) ?: throw CustomException(ErrorCode.TIP_NOT_FOUND)
 
         return tipLikeRepository.findByTipAndMember(tip, member)
     }
@@ -44,8 +44,8 @@ class TipLikeService(
         tipId: String,
         member: Member,
     ): Boolean {
-        val tip = tipRepository.findByIdOrNull(tipId) ?: throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 게시물에 대한 정보를 찾을 수 없습니다.")
-        val tipLike = tipLikeRepository.findByTipAndMember(tip, member) ?: throw CustomException(HttpStatus.BAD_REQUEST, "꿀팁 게시물 좋아요에 대한 정보를 찾을 수 없습니다.")
+        val tip = tipRepository.findByIdOrNull(tipId) ?: throw CustomException(ErrorCode.TIP_NOT_FOUND)
+        val tipLike = tipLikeRepository.findByTipAndMember(tip, member) ?: throw CustomException(ErrorCode.TIP_LIKE_NOT_FOUND)
 
         return runCatching {
             tipLikeRepository.delete(tipLike)
