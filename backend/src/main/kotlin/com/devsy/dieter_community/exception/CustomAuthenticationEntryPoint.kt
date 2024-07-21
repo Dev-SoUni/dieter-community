@@ -19,6 +19,7 @@ class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
         authException: AuthenticationException,
     ) {
         val error = ErrorResponse(
+            code = "UNAUTHORIZED",
             status = HttpStatus.UNAUTHORIZED.value(),
             message = "API 이용에 대한 인증에 실패했습니다.",
         )

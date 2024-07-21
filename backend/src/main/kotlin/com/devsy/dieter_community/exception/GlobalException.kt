@@ -20,8 +20,9 @@ class GlobalException : ResponseEntityExceptionHandler() {
             .status(e.status)
             .body(
                 ErrorResponse(
-                    e.status.value(),
-                    e.message,
+                    code = e.code,
+                    status = e.status.value(),
+                    message = e.message,
                 )
             )
     }
@@ -36,8 +37,9 @@ class GlobalException : ResponseEntityExceptionHandler() {
             .status(HttpStatus.BAD_REQUEST)
             .body(
                 ErrorResponse(
-                    HttpStatus.BAD_REQUEST.value(),
-                    "요청 데이터가 올바르지 않습니다.",
+                    code = "METHOD_ARGUMENT_NOT_VALID",
+                    status = HttpStatus.BAD_REQUEST.value(),
+                    message = "요청 데이터가 올바르지 않습니다.",
                 )
             )
     }
@@ -48,8 +50,9 @@ class GlobalException : ResponseEntityExceptionHandler() {
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(
                 ErrorResponse(
-                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "내부 서버 오류",
+                    code = "INTERNAL_SERVER_ERROR",
+                    status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    message = "내부 서버 오류",
                 )
             )
     }

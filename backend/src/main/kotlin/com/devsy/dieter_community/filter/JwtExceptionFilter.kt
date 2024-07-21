@@ -43,8 +43,9 @@ class JwtExceptionFilter : OncePerRequestFilter() {
         response.characterEncoding = "UTF-8"
         response.writer.write(mapper.writeValueAsString(
             ErrorResponse(
+                code = code.name,
                 status = code.status.value(),
-                message = code.message
+                message = code.message,
             )
         ))
     }

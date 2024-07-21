@@ -19,6 +19,7 @@ class CustomAccessDeniedHandler : AccessDeniedHandler {
         accessDeniedException: AccessDeniedException,
     ) {
         val error = ErrorResponse(
+            code = "ACCESS_DENIED",
             status = HttpStatus.FORBIDDEN.value(),
             message = "API 이용에 대한 인가에 실패했습니다.",
         )
