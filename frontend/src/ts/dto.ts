@@ -57,3 +57,10 @@ export interface TipResponseDTO {
   updatedAt: string
   createdAt: string
 }
+
+export interface TipLikeResponseDTO {
+  id: string
+  tip: TipResponseDTO
+  member: MemberResponse
+  createdAt: string
+}
