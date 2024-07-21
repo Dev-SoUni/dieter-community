@@ -40,14 +40,24 @@ const LikeButton = ({ tipId }: LikeButtonProps) => {
     }
   }
 
-  const handleLike = () => {
-    // TODO
-    alert('기능 준비 중!')
+  const handleLike = async () => {
+    try {
+      await defaultAxios.post<TipLikeResponseDTO>('/api/tip-likes', { tipId })
+      alert('꿀팁 좋아요되었습니다.')
+      setIsLiked(true)
+    } catch (error) {
+      alert('관리자에게 문의주세요.')
+    }
   }
 
-  const handleDislike = () => {
-    // TODO
-    alert('기능 준비 중!')
+  const handleDislike = async () => {
+    try {
+      await defaultAxios.delete(`/api/tips/${tipId}/tip-likes`)
+      alert('꿀팁 해제되었습니다.')
+      setIsLiked(false)
+    } catch (error) {
+      alert('관리자에게 문의주세요.')
+    }
   }
 
   if (isLoading) return null
