@@ -44,6 +44,10 @@ export interface AuthenticationResponse {
   accessToken: string
 }
 
+export interface RefreshResponse {
+  accessToken: string
+}
+
 export interface MemberResponse {
   email: string
   nickname: string

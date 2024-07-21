@@ -1,4 +1,7 @@
 import axios from 'axios'
+import { store } from '../app/store.ts'
+import { setAccessToken, setMember } from '../features/auth/authSlice.ts'
+import { logout, refresh } from '../api/auth.ts'
 
 // Axios 인스턴스
 //
@@ -36,7 +39,7 @@ defaultAxios.interceptors.response.use(
   // Axios 에러 핸들링
   //
   // 공식 문서: https://axios-http.com/kr/docs/handling_errors
-  (error) => {
+  async (error) => {
     if (error.response) {
       console.log('요청에 대한 응답이 2XX 외의 상태 코드입니다.', {
         status: error.response.status,
@@ -44,15 +47,25 @@ defaultAxios.interceptors.response.use(
         data: error.response.data,
       })
 
-      // 액세스 토큰 만료에 대한 임시 처리 (강제 로그아웃)
-      // 추후 변경이 필요함!! Refresh Token 도입 예정
       if (
         error.response.data.status === 401 &&
-        error.response.data.message === '토큰이 만료되었습니다.'
+        error.response.data.code === 'TOKEN_EXPIRED'
       ) {
-        // TODO: Refresh Access Token
-        window.localStorage.removeItem('accessToken')
-        window.location.reload()
+        try {
+          const { accessToken } = await refresh()
+
+          window.localStorage.setItem('accessToken', accessToken)
+          store.dispatch(setAccessToken(accessToken))
+
+          error.config.headers.Authorization = `Bearer ${accessToken}`
+
+          return defaultAxios(error.config)
+        } catch (error) {
+          window.localStorage.removeItem('accessToken')
+          await logout()
+          store.dispatch(setAccessToken(null))
+          store.dispatch(setMember(null))
+        }
       }
     } else if (error.request) {
       console.log('요청에 대한 응답을 받지 못했습니다.', {
