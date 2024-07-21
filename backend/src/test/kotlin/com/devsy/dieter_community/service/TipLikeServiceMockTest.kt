@@ -44,7 +44,7 @@ class TipLikeServiceMockTest {
             @DisplayName("getByTipAndMember() : 성공")
             fun getByTipAndMember() {
                 // Given
-                val tipId = "새로운_ID"
+                val tipId = "tipId"
                 val member = generateMember(email = "Lion@example.com", nickname = "사자")
                 val tip = Tip(title = "", writer = generateMember(email = "", nickname = ""), content = "")
 
@@ -77,7 +77,7 @@ class TipLikeServiceMockTest {
             @DisplayName("getByTipAndMember() : 해당 꿀팁 게시물이 없는 경우")
             fun getByTipAndMember_해당_꿀팁_게시물이_없는_경우() {
                 // Given
-                val tipId = "잘못된_ID"
+                val tipId = "tipId"
                 val member = generateMember(email = "Lion@example.com", nickname = "사자")
 
                 // When, Then
@@ -106,7 +106,7 @@ class TipLikeServiceMockTest {
             @DisplayName("post() : 성공")
             fun post() {
                 // Given
-                val tipId = "새로운_ID"
+                val tipId = "tipId"
                 val member = generateMember(email = "Lion@example.com", nickname = "사자")
 
                 // When
@@ -144,7 +144,7 @@ class TipLikeServiceMockTest {
             @DisplayName("post() : 해당 꿀팁 게시물이 없는 경우")
             fun post_해당_꿀팁_게시물이_없는_경우() {
                 // Given
-                val tipId = "잘못된_ID"
+                val tipId = "tipId"
                 val member = generateMember(email = "Lion@example.com", nickname = "사자")
 
                 // When
@@ -161,7 +161,7 @@ class TipLikeServiceMockTest {
             fun post_이미_좋아요가_된_꿀팁일_경우() {
                 // Given
                 val tip = Tip(title = "", writer = generateMember(email = "", nickname = ""), content = "")
-                val tipId = "tip-id"
+                val tipId = "tipId"
                 val member = generateMember(email = "Lion@example.com", nickname = "사자")
 
                 // When
@@ -190,7 +190,7 @@ class TipLikeServiceMockTest {
             @DisplayName("deleteByTipAndMember() : 성공")
             fun deleteByTipAndMember_성공() {
                 // Given
-                val tipId = "올바른_ID"
+                val tipId = "tipId"
                 val tip = Tip(title = "", writer = generateMember(email = "", nickname = ""), content = "")
                 val member = generateMember(email = "Lion@example.com", nickname = "사자")
                 val tipLike = TipLike(tip = tip, member = member)
@@ -221,7 +221,7 @@ class TipLikeServiceMockTest {
             @DisplayName("deleteByTipAndMember() : 해당 꿀팁 게시물이 없는 경우")
             fun deleteByTipAndMember_좋아요가_되어_있지_않은_경우() {
                 // Given
-                val tipId = "잘못된_ID"
+                val tipId = "tipId"
                 val member = generateMember(email = "Lion@example.com", nickname = "사자")
 
                 // When, Then
@@ -239,7 +239,7 @@ class TipLikeServiceMockTest {
             @DisplayName("deleteByTipAndMember() : 해당 꿀팁 게시물 좋아요가 없는 경우")
             fun deleteByTipAndMember_해당_꿀팁_게시물_좋아요가_없는_경우() {
                 // Given
-                val tipId = "올바른_ID"
+                val tipId = "tipId"
                 val member = generateMember(email = "Lion@example.com", nickname = "사자")
                 val tip = Tip(title = "", writer = generateMember(email = "", nickname = ""), content = "")
 
