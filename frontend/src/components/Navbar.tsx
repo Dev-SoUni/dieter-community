@@ -52,7 +52,7 @@ export const Navbar = () => {
           {/* 로고 */}
           <Box>
             <Typography component="h1" variant="h4">
-              DC
+              <Link to="/">DC</Link>
             </Typography>
           </Box>
           {/* 아이콘 버튼들 */}
