@@ -7,6 +7,7 @@ import com.devsy.dieter_community.exception.CustomException
 import com.devsy.dieter_community.exception.ErrorCode
 import com.devsy.dieter_community.repository.RefreshTokenRepository
 import jakarta.servlet.http.Cookie
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
@@ -47,19 +48,30 @@ class AuthenticationService(
         )
     }
 
-    // TODO: 수정 필요
     fun refresh(refreshToken: String): String? {
         val extractedEmail = tokenService.extractEmail(refreshToken)
 
         return extractedEmail?.let { email ->
-            // Redis에 refreshToken 유효 여부 확인
-            refreshTokenRepository.findById(email)
+            // Redis에서 해당 email의 RefreshToken 조회
+            val redisRefreshToken = refreshTokenRepository.findByIdOrNull(id = email)
                 ?: throw CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND)
+
+            // Redis Token과 Refresh Token 일치 여부 확인
+            if (redisRefreshToken.refreshToken != refreshToken)
+                throw CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND)
 
             val currentUserDetails = customUserDetailsService.loadUserByUsername(username = email)
 
             // 새로운 refreshToken 추가
             createAccessToken(currentUserDetails)
+        }
+    }
+
+    fun deleteRedisRefreshToken(id: String) {
+        val token = refreshTokenRepository.findByIdOrNull(id)
+
+        if (token != null) {
+            refreshTokenRepository.delete(token)
         }
     }
 

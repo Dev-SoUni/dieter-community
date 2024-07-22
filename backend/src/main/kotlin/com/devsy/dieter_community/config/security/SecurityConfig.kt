@@ -48,6 +48,7 @@ class SecurityConfig {
             cors { }
             authorizeRequests {
                 authorize("/api/auth/refresh", permitAll)
+                authorize("/api/auth/logout", authenticated)
                 authorize(HttpMethod.POST, "/api/tips", authenticated)
                 authorize(HttpMethod.PATCH, "/api/tips/**", authenticated)
                 authorize(HttpMethod.DELETE, "/api/tips/**", authenticated)

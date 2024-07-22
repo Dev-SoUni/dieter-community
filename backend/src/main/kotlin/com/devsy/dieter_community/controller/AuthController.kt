@@ -70,9 +70,13 @@ class AuthController(
     }
 
     @PostMapping("/logout")
-    fun logout(response: HttpServletResponse): ResponseEntity<Unit> {
-        val cookie = authenticationService.createExpiredRefreshTokenCookie()
+    fun logout(
+        @AuthenticationPrincipal member: Member,
+        response: HttpServletResponse
+    ): ResponseEntity<Unit> {
+        authenticationService.deleteRedisRefreshToken(id = member.username)
 
+        val cookie = authenticationService.createExpiredRefreshTokenCookie()
         response.addCookie(cookie)
 
         return ResponseEntity
