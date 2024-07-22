@@ -5,6 +5,7 @@ import com.devsy.dieter_community.domain.Tip
 import com.devsy.dieter_community.domain.TipLike
 import com.devsy.dieter_community.dto.TipPatchRequest
 import com.devsy.dieter_community.dto.TipPostRequest
+import com.devsy.dieter_community.providers.createAccessToken
 import com.devsy.dieter_community.repository.MemberRepository
 import com.devsy.dieter_community.repository.TipLikeRepository
 import com.devsy.dieter_community.repository.TipRepository
@@ -25,7 +26,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 import kotlin.test.Test
 import kotlin.test.fail
 
@@ -156,7 +156,7 @@ class TipControllerTest {
             @DisplayName("꿀팁 등록 : 로그인한 상태")
             fun 꿀팁_등록_로그인_상태() {
                 // Given
-                val accessToken = createAccessToken()
+                val accessToken = createAccessToken(member, tokenService)
                 val requestBody = TipPostRequest(title = "꿀팁(New)", content = "내용(New)")
 
                 // When
@@ -223,7 +223,7 @@ class TipControllerTest {
             fun 꿀팁_수정() {
                 // Given
                 val id = tips[0].id ?: fail("꿀팁을 찾을 수 없음")
-                val accessToken = createAccessToken()
+                val accessToken = createAccessToken(member, tokenService)
                 val requestBody = TipPatchRequest(title = "꿀팁(Update)", content = "내용(Update)")
 
                 // When
@@ -283,7 +283,7 @@ class TipControllerTest {
             fun 꿀팁_수정_존재하지_않는_ID() {
                 // Given
                 val id = "wrong_post_id"
-                val accessToken = createAccessToken()
+                val accessToken = createAccessToken(member, tokenService)
                 val requestBody = TipPatchRequest(title = "꿀팁(Update)", content = "내용(Update)")
 
                 // When
@@ -321,7 +321,7 @@ class TipControllerTest {
             fun 꿀팁_삭제() {
                 // Given
                 val id = tips[0].id ?: fail("꿀팁을 찾을 수 없음")
-                val accessToken = createAccessToken()
+                val accessToken = createAccessToken(member, tokenService)
 
                 // When
                 val resultActions = mock.perform(
@@ -370,7 +370,7 @@ class TipControllerTest {
             fun 꿀팁_삭제_존재하지_않는_ID() {
                 // Given
                 val id = "wrong_post_id"
-                val accessToken = createAccessToken()
+                val accessToken = createAccessToken(member, tokenService)
 
                 // When
                 val resultActions = mock.perform(
@@ -404,7 +404,7 @@ class TipControllerTest {
             @DisplayName("꿀팁 좋아요 삭제")
             fun 꿀팁_좋아요_삭제(){
                 // Given
-                val accessToken = createAccessToken()
+                val accessToken = createAccessToken(member, tokenService)
                 val tipId = tips[0].id ?: fail("꿀팁을 찾을 수 없음")
 
                 // When
@@ -454,7 +454,7 @@ class TipControllerTest {
             fun 꿀팁_좋아요_삭제_꿀팁_ID가_존재하지_않는_경우() {
                 // Given
                 val tipId = "wrong_post_id"
-                val accessToken = createAccessToken()
+                val accessToken = createAccessToken(member, tokenService)
 
                 // When
                 val resultActions = mock.perform(
@@ -474,13 +474,6 @@ class TipControllerTest {
             }
         }
     }
-
-
-    private fun createAccessToken() =
-        tokenService.generate(
-            userDetails = member,
-            expirationDate = Date(System.currentTimeMillis() + 360000),
-        )
 
     companion object {
 

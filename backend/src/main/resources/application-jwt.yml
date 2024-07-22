@@ -1,4 +1,5 @@
 jwt:
   key: 2y2zQFGwJEL/3rbzg+mqBHPYP5wQqn/vG/MCTqVKgBw=
-  access-token-expiration: 3600000 # 1시간 (Milliseconds 단위)
+#  access-token-expiration: 3600000 # 1시간 (Milliseconds 단위)
+  access-token-expiration: 1000 # 1시간 (Milliseconds 단위)
   refresh-token-expiration: 86400000 # 24시간 (Milliseconds 단위)

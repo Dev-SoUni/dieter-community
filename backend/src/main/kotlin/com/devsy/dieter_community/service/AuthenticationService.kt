@@ -1,7 +1,11 @@
 package com.devsy.dieter_community.service
 
 import com.devsy.dieter_community.config.JwtProperties
+import com.devsy.dieter_community.domain.RefreshToken
 import com.devsy.dieter_community.dto.AuthenticationResponse
+import com.devsy.dieter_community.exception.CustomException
+import com.devsy.dieter_community.exception.ErrorCode
+import com.devsy.dieter_community.repository.RefreshTokenRepository
 import jakarta.servlet.http.Cookie
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -16,6 +20,7 @@ class AuthenticationService(
     private val tokenService: TokenService,
     private val jwtProperties: JwtProperties,
     private val customUserDetailsService: CustomUserDetailsService,
+    private val refreshTokenRepository: RefreshTokenRepository,
 ) {
 
     fun authentication(
@@ -31,6 +36,9 @@ class AuthenticationService(
         val refreshToken = createRefreshToken(user)
         val refreshTokenCookie = createRefreshTokenCookie(refreshToken)
 
+        val redis = RefreshToken(id = email, refreshToken = refreshToken)
+        refreshTokenRepository.save(redis)
+
         return AuthenticationResponse(
             email = user.email,
             nickname = user.nickname,
@@ -39,15 +47,19 @@ class AuthenticationService(
         )
     }
 
+    // TODO: 수정 필요
     fun refresh(refreshToken: String): String? {
         val extractedEmail = tokenService.extractEmail(refreshToken)
+
         return extractedEmail?.let { email ->
+            // Redis에 refreshToken 유효 여부 확인
+            refreshTokenRepository.findById(email)
+                ?: throw CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND)
+
             val currentUserDetails = customUserDetailsService.loadUserByUsername(username = email)
 
-            if (!tokenService.isExpired(refreshToken)) {
-                createAccessToken(currentUserDetails)
-            } else
-                null
+            // 새로운 refreshToken 추가
+            createAccessToken(currentUserDetails)
         }
     }
 
