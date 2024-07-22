@@ -1,5 +1,5 @@
-@accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJic3kxNDgyQG5hdmVyLmNvbSIsImlhdCI6MTcyMTYzMTY1MywiZXhwIjoxNzIxNjM1MjUzfQ.xJqXvJxbNUl3c3R2GfBzT1RPQhuL1ZfaLjamYtAO4vY
-@refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJic3kxNDgyQG5hdmVyLmNvbSIsImlhdCI6MTcyMTYzMTY1MywiZXhwIjoxNzIxNzE4MDUzfQ.XfhiY0chhnVi6iWnKlSBTr6uFzm50iEupjyj8uZuQ-U
+@accessToken=your_access_token
+@refreshToken=your_refresh_token
 
 ### 로그인
 POST http://localhost:8080/api/auth
