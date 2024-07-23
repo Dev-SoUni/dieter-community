@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 
-import { Navbar } from '../components/Navbar.tsx'
+import Navbar from '../components/navbar'
 
 const MainLayout = () => {
   return (

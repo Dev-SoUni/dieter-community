@@ -7,10 +7,12 @@ import { defaultAxios } from './config/axios.ts'
 import MainLayout from './layouts/MainLayout.tsx'
 import MainPage from './pages/MainPage.tsx'
 import LoginPage from './pages/LoginPage.tsx'
+import LogoutPage from './pages/LogoutPage.tsx'
 import TipPage from './pages/TipPage.tsx'
 import TipNewPage from './pages/TipNewPage.tsx'
 import TipDetailPage from './pages/TipDetailPage.tsx'
 import TipEditPage from './pages/TipEditPage.tsx'
+import ErrorPage from './pages/ErrorPage.tsx'
 import { AuthRoute } from './components/AuthRoute.tsx'
 import { MemberResponse } from './ts/dto.ts'
 
@@ -18,6 +20,7 @@ const router = createBrowserRouter([
   {
     path: '',
     element: <MainLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: '/',
@@ -26,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: '/auth/login',
         element: <LoginPage />,
+      },
+      {
+        path: '/auth/logout',
+        element: <LogoutPage />,
       },
       {
         path: '/tips',
@@ -70,6 +77,7 @@ const App = () => {
     }
 
     setAuthStore()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return <RouterProvider router={router} />

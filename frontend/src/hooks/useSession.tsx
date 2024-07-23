@@ -1,15 +1,19 @@
-import { useMemo } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useAppSelector } from '../app/hook.ts'
 
 export const useSession = () => {
-  const authStore = useAppSelector((state) => state.auth)
+  const [session, setSession] = useState<
+    'loading' | 'authenticated' | 'unauthenticated'
+  >('loading')
 
-  const isLoggedIn = useMemo(() => {
-    return authStore.accessToken !== null
-  }, [authStore.accessToken])
+  const store = useAppSelector((state) => state.auth)
+
+  useEffect(() => {
+    setSession(store.accessToken !== null ? 'authenticated' : 'unauthenticated')
+  }, [store.accessToken])
 
   return {
-    isLoggedIn,
+    session,
   }
 }
