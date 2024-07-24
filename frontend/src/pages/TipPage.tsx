@@ -6,13 +6,10 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
+import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
-import { Stack } from '@mui/material'
 import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import SearchIcon from '@mui/icons-material/Search'
-import TextField from '@mui/material/TextField'
 import Pagination from '@mui/material/Pagination'
 
 import { useAppSelector, useAppDispatch } from '../app/hook.ts'
@@ -22,8 +19,8 @@ import {
   setSearch,
 } from '../features/tip/tipSlice.ts'
 import { defaultAxios } from '../config/axios.ts'
+import Search from '../components/search'
 import { TipListItem } from '../components/TipListItem.tsx'
-import Typography from '@mui/material/Typography'
 
 const TipPage = () => {
   const dispatch = useAppDispatch()
@@ -80,21 +77,7 @@ const TipPage = () => {
         </Box>
         {/* 검색 */}
         <form onSubmit={handleSearchSubmit}>
-          <Stack direction="row" gap={1}>
-            <Box width={300}>
-              <TextField
-                inputRef={searchTitleRef}
-                label="검색"
-                placeholder="제목을 입력해주세요."
-                fullWidth
-                size="small"
-                defaultValue={search.title || ''}
-              />
-            </Box>
-            <IconButton type="submit">
-              <SearchIcon />
-            </IconButton>
-          </Stack>
+          <Search inputRef={searchTitleRef} defaultValue={search.title} />
         </form>
       </Box>
 
