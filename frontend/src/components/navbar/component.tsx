@@ -17,7 +17,7 @@ export const Navbar = () => {
         {/* 중앙 */}
         <SC.List>
           {Data.links.map((link) => (
-            <li>
+            <li key={link.href}>
               <SC.LinkButton key={link.href} to={link.href}>
                 {link.label}
               </SC.LinkButton>
