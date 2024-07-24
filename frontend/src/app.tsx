@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { ThemeProvider } from '@mui/material'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import { useAppDispatch } from './app/hook.ts'
@@ -14,6 +15,7 @@ import TipDetailPage from './pages/TipDetailPage.tsx'
 import TipEditPage from './pages/TipEditPage.tsx'
 import ErrorPage from './pages/ErrorPage.tsx'
 import { AuthRoute } from './components/AuthRoute.tsx'
+import { theme } from './styles/theme.ts'
 import { MemberResponse } from './ts/dto.ts'
 
 const router = createBrowserRouter([
@@ -80,7 +82,11 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return <RouterProvider router={router} />
+  return (
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  )
 }
 
 export default App
