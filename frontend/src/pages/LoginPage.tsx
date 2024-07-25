@@ -79,6 +79,7 @@ const LoginPage = () => {
           <Stack direction="column" gap={2}>
             <Box>
               <TextField
+                variant="standard"
                 type="email"
                 name="email"
                 label="이메일 주소"
@@ -90,6 +91,7 @@ const LoginPage = () => {
             </Box>
             <Box>
               <TextField
+                variant="standard"
                 type="password"
                 name="password"
                 label="비밀번호"
