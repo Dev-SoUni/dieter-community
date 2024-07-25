@@ -7,6 +7,7 @@ import type { TipResponseDTO } from '../ts/dto.ts'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
+import CustomHelmet from '../components/helmet'
 
 const TipEditPage = () => {
   const params = useParams()
@@ -55,6 +56,10 @@ const TipEditPage = () => {
   }
   return (
     <main>
+      <CustomHelmet
+        title="꿀팁 수정 | 다커"
+        description="꿀팁 수정 페이지입니다."
+      />
       <Typography component="h1" variant="h5">
         꿀팁 수정
       </Typography>

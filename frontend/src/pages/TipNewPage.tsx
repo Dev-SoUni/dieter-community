@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
 import { defaultAxios } from '../config/axios.ts'
+import CustomHelmet from '../components/helmet'
 
 const TipNewPage = () => {
   const navigate = useNavigate()
@@ -38,6 +39,10 @@ const TipNewPage = () => {
 
   return (
     <div>
+      <CustomHelmet
+        title="꿀팁 등록 | 꿀팁"
+        description="꿀팁 등록 페이지입니다."
+      />
       <div>
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" gap={2}>

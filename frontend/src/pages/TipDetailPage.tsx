@@ -12,6 +12,7 @@ import { useSession } from '../hooks/useSession.tsx'
 import { defaultAxios } from '../config/axios.ts'
 import { DeleteButton } from '../components/DeleteButton.tsx'
 import type { TipResponseDTO, TipLikeResponseDTO } from '../ts/dto.ts'
+import CustomHelmet from '../components/helmet'
 
 interface LikeButtonProps {
   tipId: string
@@ -120,6 +121,10 @@ const TipDetailPage = () => {
 
   return (
     <main>
+      <CustomHelmet
+        title="꿀팁 상세 | 다커"
+        description="꿀팁 상세 페이지입니다."
+      />
       <Typography component="h1" variant="h5">
         꿀팁 상세
       </Typography>

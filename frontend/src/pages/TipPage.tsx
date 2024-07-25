@@ -21,6 +21,7 @@ import {
 import { defaultAxios } from '../config/axios.ts'
 import Search from '../components/search'
 import { TipListItem } from '../components/TipListItem.tsx'
+import CustomHelmet from '../components/helmet'
 
 const TipPage = () => {
   const dispatch = useAppDispatch()
@@ -62,7 +63,7 @@ const TipPage = () => {
   return (
     <div>
       <h1>TIPS</h1>
-
+      <CustomHelmet title="꿀팁 | 다커" description="꿀팁 페이지입니다." />
       <Box
         display="flex"
         justifyContent="space-between"

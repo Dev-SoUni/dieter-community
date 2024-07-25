@@ -9,6 +9,7 @@ import Button from '@mui/material/Button'
 import { useAppDispatch, useAppSelector } from '../app/hook.ts'
 import { setAccessToken, setMember } from '../features/auth/authSlice.ts'
 import { authenticate } from '../api/auth.ts'
+import CustomHelmet from '../components/helmet'
 
 interface FormInputs {
   email: string
@@ -62,6 +63,10 @@ const LoginPage = () => {
         alignItems: 'center',
       }}
     >
+      <CustomHelmet
+        title="로그인 | 꿀팁"
+        description="다이어트커뮤니티 로그인 페이지입니다."
+      />
       <Box
         p={4}
         borderRadius={1}
