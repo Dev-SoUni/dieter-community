@@ -79,7 +79,7 @@ const TipDetailPage = () => {
   const [canEdit, setCanEdit] = useState<boolean>(false)
 
   const authStore = useAppSelector((state) => state.auth)
-  const { isLoggedIn } = useSession()
+  const { session } = useSession()
 
   useEffect(() => {
     const requestTip = async () => {
@@ -143,7 +143,7 @@ const TipDetailPage = () => {
           <Link to="/tips">
             <Button variant="outlined">목록</Button>
           </Link>
-          {tipId && isLoggedIn && <LikeButton tipId={tipId} />}
+          {tipId && session === 'authenticated' && <LikeButton tipId={tipId} />}
         </Box>
       </Box>
     </main>

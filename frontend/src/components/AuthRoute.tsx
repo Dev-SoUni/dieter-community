@@ -10,9 +10,9 @@ interface AuthRouteProps {
 }
 
 export const AuthRoute = ({ component: Component }: AuthRouteProps) => {
-  const session = useSession()
+  const { session } = useSession()
 
-  if (!session.isLoggedIn) {
+  if (session === 'authenticated') {
     return (
       <Box>
         <Stack>
