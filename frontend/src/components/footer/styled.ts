@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import MuiGrid from '@mui/material/Grid'
 import MuiContainer from '@mui/material/Container'
 import { Link } from 'react-router-dom'
 
@@ -11,7 +12,7 @@ export const Container = styled(MuiContainer)`
   height: 100%;
 `
 
-export const SiteGroupList = styled.div`
+export const SiteGroupList = styled(MuiGrid)`
   display: flex;
   padding-bottom: 50px;
 `
