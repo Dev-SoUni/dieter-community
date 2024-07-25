@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material'
+import { orange, red } from '@mui/material/colors'
 
 export const theme = createTheme({
   components: {
@@ -23,15 +24,6 @@ export const theme = createTheme({
         },
       },
     },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '--TextField-brandBorderColor': '#E0E3E7',
-          '--TextField-brandBorderHoverColor': '#B2BAC2',
-          '--TextField-brandBorderFocusedColor': '#6F7E8C',
-        },
-      },
-    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
@@ -52,13 +44,35 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '&::before, &::after': {
-            borderBottom: '2px solid var(--TextField-brandBorderColor)',
+            borderBottom: `2px solid #E0E3E7`,
           },
-          '&:hover:not(.Mui-disabled, .Mui-error):before': {
-            borderBottom: '2px solid var(--TextField-brandBorderHoverColor)',
+
+          '&.MuiInputBase-colorPrimary': {
+            '&:hover:not(.Mui-disabled, .Mui-error):before': {
+              borderBottom: '2px solid #B2BAC2',
+            },
+
+            '&.Mui-focused:after': {
+              borderBottom: '2px solid #6F7E8C',
+            },
           },
-          '&.Mui-focused:after': {
-            borderBottom: '2px solid var(--TextField-brandBorderFocusedColor)',
+          '&.MuiInputBase-colorWarning': {
+            '&:hover:not(.Mui-disabled, .Mui-error):before': {
+              borderBottom: `2px solid ${orange['200']}`,
+            },
+
+            '&.Mui-focused:after': {
+              borderBottom: `2px solid ${orange['500']}`,
+            },
+          },
+          '&.MuiInputBase-colorError': {
+            '&:hover:not(.Mui-disabled, .Mui-error):before': {
+              borderBottom: `2px solid ${red['200']}`,
+            },
+
+            '&.Mui-focused:after': {
+              borderBottom: `2px solid ${red['500']}`,
+            },
           },
         },
       },
@@ -67,7 +81,15 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '&.Mui-focused': {
-            color: '#000',
+            '&.MuiFormLabel-colorPrimary': {
+              color: '#000',
+            },
+            '&.MuiFormLabel-colorWarning': {
+              color: orange['500'],
+            },
+            '&.MuiFormLabel-colorError': {
+              color: red['500'],
+            },
           },
         },
         asterisk: {
