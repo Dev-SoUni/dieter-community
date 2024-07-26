@@ -7,4 +7,7 @@ export const Search = styled.div`
 `
 export const SearchInput = styled(OutlinedInput)`
   width: 100%;
+  border-radius: 65px;
+  background-color: #f8f9fa;
+  font-size: 14px;
 `

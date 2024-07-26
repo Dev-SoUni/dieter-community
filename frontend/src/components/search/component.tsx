@@ -24,6 +24,7 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
             </InputAdornment>
           }
           {...props}
+          sx={{ border: 'none', '& fieldset': { border: 'none' } }}
         />
       </SC.Search>
     )

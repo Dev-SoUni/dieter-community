@@ -24,22 +24,6 @@ export const theme = createTheme({
         },
       },
     },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          borderRadius: '65px',
-          backgroundColor: '#f8f9fa',
-        },
-        input: {
-          fontSize: '14px',
-          paddingLeft: '40px',
-        },
-        notchedOutline: {
-          border: 'none',
-          outline: 'none',
-        },
-      },
-    },
     MuiInput: {
       styleOverrides: {
         root: {
