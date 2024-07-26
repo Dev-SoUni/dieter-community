@@ -12,7 +12,7 @@ interface AuthRouteProps {
 export const AuthRoute = ({ component: Component }: AuthRouteProps) => {
   const { session } = useSession()
 
-  if (session === 'authenticated') {
+  if (session === 'unauthenticated') {
     return (
       <Box>
         <Stack>
