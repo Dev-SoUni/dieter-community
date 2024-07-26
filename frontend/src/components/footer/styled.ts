@@ -34,8 +34,12 @@ export const SiteGroupItem = styled.li`
 `
 
 export const SiteGroupItemLink = styled(Link)`
-  color: #425968;
+  color: #6b7684;
+
   font-size: 14px;
+  &:hover {
+    text-decoration: underline;
+  }
 `
 
 export const SiteInfo = styled.div`
@@ -59,4 +63,8 @@ export const SocialItem = styled.li`
 export const SocialImage = styled.img`
   width: 32px;
   height: 32px;
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
 `

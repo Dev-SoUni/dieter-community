@@ -10,8 +10,8 @@ export const Footer = () => {
       <SC.Container>
         <SC.SiteGroupList container spacing={2}>
           {Data.sites.map((site) => (
-            <Grid item sm={6} md={3} lg={2}>
-              <SC.SiteGroup key={site.groupTitle}>
+            <Grid item sm={6} md={3} lg={2} key={site.groupTitle}>
+              <SC.SiteGroup>
                 <SC.SiteGroupTitle>{site.groupTitle}</SC.SiteGroupTitle>
                 {site.groupList.map((group) => (
                   <SC.SiteGroupItem key={group.label}>
