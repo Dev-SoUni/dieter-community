@@ -120,33 +120,37 @@ const TipDetailPage = () => {
   }
 
   return (
-    <main>
+    <>
       <CustomHelmet
         title="꿀팁 상세 | 다커"
         description="꿀팁 상세 페이지입니다."
       />
-      <Typography component="h1" variant="h5">
-        꿀팁 상세
-      </Typography>
-      <Box>
-        <Typography component="h2" variant="h5">
-          {tip.title}
-        </Typography>
-        <Typography>{tip.content}</Typography>
-        <Box display="flex" gap={2}>
-          {canEdit && (
-            <Link to={`/tips/${tip.id}/edit`}>
-              <Button variant="outlined">수정</Button>
+      <main>
+        <Typography variant="h1">꿀팁 상세</Typography>
+        <Box mt={4}>
+          <Typography component="h2" variant="h3" mt={2}>
+            제목 : {tip.title}
+          </Typography>
+          <Box mt={2}>
+            <Typography variant="body1">{tip.content}</Typography>
+          </Box>
+          <Box mt={8} display="flex" alignItems="center" gap={2}>
+            {canEdit && (
+              <Link to={`/tips/${tip.id}/edit`}>
+                <Button variant="outlined">수정</Button>
+              </Link>
+            )}
+            {canEdit && <DeleteButton onConfirm={handleDelete} />}
+            <Link to="/tips">
+              <Button variant="outlined">목록</Button>
             </Link>
-          )}
-          {canEdit && <DeleteButton onConfirm={handleDelete} />}
-          <Link to="/tips">
-            <Button variant="outlined">목록</Button>
-          </Link>
-          {tipId && session === 'authenticated' && <LikeButton tipId={tipId} />}
+            {tipId && session === 'authenticated' && (
+              <LikeButton tipId={tipId} />
+            )}
+          </Box>
         </Box>
-      </Box>
-    </main>
+      </main>
+    </>
   )
 }
 

@@ -1,3 +1,4 @@
+import { alpha } from '@mui/material/styles'
 import type { Theme } from '@mui/material/styles'
 
 export const overrides = (theme: Theme): Theme['components'] => {
@@ -31,6 +32,40 @@ export const overrides = (theme: Theme): Theme['components'] => {
           color: theme.palette.common.black,
           textDecoration: 'none',
           outline: 'none',
+        },
+      },
+    },
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          backgroundColor: alpha(theme.palette.grey[900], 0.8),
+        },
+        invisible: {
+          background: 'transparent',
+        },
+      },
+    },
+    MuiPaper: {
+      defaultProps: {
+        elevation: 0,
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: 12,
+        },
+      },
+    },
+    MuiDialogContentText: {
+      styleOverrides: {
+        root: {
+          fontSize: '14px',
+        },
+      },
+    },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          padding: '8px 24px',
         },
       },
     },

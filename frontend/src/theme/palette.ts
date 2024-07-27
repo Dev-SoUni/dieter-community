@@ -28,12 +28,12 @@ export const primary = {
 }
 
 export const secondary = {
-  lighter: '#EFD6FF',
-  light: '#C684FF',
-  main: '#8E33FF',
-  dark: '#5119B7',
-  darker: '#27097A',
-  contrastText: '#FFFFFF',
+  lighter: grey[500],
+  light: grey[600],
+  main: grey[700],
+  dark: grey[800],
+  darker: grey[900],
+  contrastText: '#000000',
 }
 
 export const info = {

@@ -5,6 +5,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
+import WarningIcon from '@mui/icons-material/Warning'
 
 interface DeleteButtonProps {
   onConfirm: () => void
@@ -28,11 +29,21 @@ export const DeleteButton = ({ onConfirm }: DeleteButtonProps) => {
       </Button>
       <Dialog
         open={open}
+        maxWidth="xs"
+        fullWidth
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle
+          id="alert-dialog-title"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <WarningIcon color="warning" />
           정말 삭제하시겠습니까?
         </DialogTitle>
         <DialogContent>
@@ -41,15 +52,10 @@ export const DeleteButton = ({ onConfirm }: DeleteButtonProps) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={handleClose}>
+          <Button variant="outlined" color="secondary" onClick={handleClose}>
             취소
           </Button>
-          <Button
-            variant="outlined"
-            onClick={handleConfirm}
-            color="warning"
-            autoFocus
-          >
+          <Button variant="contained" autoFocus onClick={handleConfirm}>
             삭제
           </Button>
         </DialogActions>
