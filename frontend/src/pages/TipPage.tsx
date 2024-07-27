@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Pagination from '@mui/material/Pagination'
@@ -61,68 +62,72 @@ const TipPage = () => {
   }
 
   return (
-    <div>
-      <h1>TIPS</h1>
+    <>
       <CustomHelmet title="꿀팁 | 다커" description="꿀팁 페이지입니다." />
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
-        {/* 검색 정보*/}
-        <Box>
-          {search.title && (
-            <Typography>'{search.title}' 에 대한 검색 결과입니다.</Typography>
+      <div>
+        <Typography variant="h1">꿀팁</Typography>
+
+        {/* 검색 */}
+        <Grid container mt={2} mb={4}>
+          {/* 검색 정보*/}
+          <Grid item xs={12} md={5}>
+            {search.title && (
+              <Typography variant="caption">
+                '{search.title}' 에 대한 검색 결과입니다.
+              </Typography>
+            )}
+          </Grid>
+          <Grid item xs={0} md={2} />
+          {/* 검색 */}
+          <Grid item xs={12} md={5}>
+            <Box component="form" onSubmit={handleSearchSubmit}>
+              <Search inputRef={searchTitleRef} defaultValue={search.title} />
+            </Box>
+          </Grid>
+        </Grid>
+
+        <div>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">아이디</TableCell>
+                  <TableCell align="left">제목</TableCell>
+                  <TableCell align="center">등록 날짜</TableCell>
+                  <TableCell align="center" sx={{ width: 60 }} />
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {pageableData &&
+                  pageableData.content.map((tip) => (
+                    <TipListItem
+                      key={tip.id}
+                      id={tip.id}
+                      title={tip.title}
+                      createdAt={tip.createdAt}
+                    />
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+        <Box mt={4} display="flex" justifyContent="center">
+          {pageableData && (
+            <Pagination
+              count={pageableData.totalPages}
+              page={page + 1}
+              color="primary"
+              onChange={handlePaginationChange}
+            />
           )}
         </Box>
-        {/* 검색 */}
-        <form onSubmit={handleSearchSubmit}>
-          <Search inputRef={searchTitleRef} defaultValue={search.title} />
-        </form>
-      </Box>
-
-      <div>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">아이디</TableCell>
-                <TableCell align="left">제목</TableCell>
-                <TableCell align="center">등록 날짜</TableCell>
-                <TableCell align="center" sx={{ width: 60 }} />
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {pageableData &&
-                pageableData.content.map((tip) => (
-                  <TipListItem
-                    key={tip.id}
-                    id={tip.id}
-                    title={tip.title}
-                    createdAt={tip.createdAt}
-                  />
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Box mt={4} gap={2} display="flex" justifyContent="end">
+          <Link to="/tips/new">
+            <Button variant="contained">등록</Button>
+          </Link>
+        </Box>
       </div>
-      <Box mt={4} display="flex" justifyContent="center">
-        {pageableData && (
-          <Pagination
-            count={pageableData.totalPages}
-            page={page + 1}
-            color="primary"
-            onChange={handlePaginationChange}
-          />
-        )}
-      </Box>
-      <Box mt={4} gap={2} display="flex" justifyContent="end">
-        <Link to="/tips/new">
-          <Button variant="contained">등록</Button>
-        </Link>
-      </Box>
-    </div>
+    </>
   )
 }
 
