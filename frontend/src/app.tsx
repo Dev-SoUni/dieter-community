@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { ThemeProvider } from '@mui/material'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
+
+import ThemeProvider from './theme'
 
 import { useAppDispatch } from './app/hook.ts'
 import { setAccessToken, setMember } from './features/auth/authSlice.ts'
@@ -16,7 +17,6 @@ import TipDetailPage from './pages/TipDetailPage.tsx'
 import TipEditPage from './pages/TipEditPage.tsx'
 import ErrorPage from './pages/ErrorPage.tsx'
 import { AuthRoute } from './components/AuthRoute.tsx'
-import { theme } from './styles/theme.ts'
 import { MemberResponse } from './ts/dto.ts'
 import CustomHelmet from './components/helmet'
 
@@ -90,7 +90,7 @@ const App = () => {
         title="다커"
         description="다이어트 커뮤니티 메인 페이지 입니다."
       />
-      <ThemeProvider theme={theme}>
+      <ThemeProvider>
         <RouterProvider router={router} />
       </ThemeProvider>
     </HelmetProvider>
