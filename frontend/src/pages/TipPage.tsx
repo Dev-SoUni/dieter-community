@@ -121,9 +121,6 @@ const TipPage = () => {
         <Link to="/tips/new">
           <Button variant="contained">등록</Button>
         </Link>
-        <Link to="/">
-          <Button variant="contained">main</Button>
-        </Link>
       </Box>
     </div>
   )
