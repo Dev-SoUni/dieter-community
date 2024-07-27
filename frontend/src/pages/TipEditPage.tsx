@@ -5,9 +5,9 @@ import Typography from '@mui/material/Typography'
 import { defaultAxios } from '../config/axios.ts'
 import type { TipResponseDTO } from '../ts/dto.ts'
 import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import CustomHelmet from '../components/helmet'
+import DefaultTextField from '../components/input/defaultTextField'
 
 const TipEditPage = () => {
   const params = useParams()
@@ -67,34 +67,34 @@ const TipEditPage = () => {
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" gap={2}>
             <Box>
-              <TextField
+              <DefaultTextField
+                id="title"
                 label="제목"
-                placeholder="제목을 입력해주세요."
-                fullWidth
                 value={title}
+                required
                 onChange={(e) => setTitle(e.target.value)}
               />
             </Box>
             <Box>
-              <TextField
+              <DefaultTextField
+                id="content"
                 label="내용"
-                placeholder="내용을 입력해주세요."
-                multiline
-                fullWidth
-                rows={10}
                 value={content}
+                required
+                multiline
+                rows={10}
                 onChange={(e) => setContent(e.target.value)}
               />
             </Box>
             <Box display="flex" justifyContent="end" gap={2}>
+              <Button type="submit" variant="contained" color="info">
+                수정
+              </Button>
               <Link to={`/tips/${tip.id}`}>
-                <Button type="button" variant="outlined">
-                  취소
+                <Button type="button" variant="contained" color="secondary">
+                  목록
                 </Button>
               </Link>
-              <Button type="submit" variant="contained">
-                변경사항 저장
-              </Button>
             </Box>
           </Box>
         </form>

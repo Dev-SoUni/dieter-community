@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
 import { defaultAxios } from '../config/axios.ts'
 import CustomHelmet from '../components/helmet'
+import DefaultTextField from '../components/input/defaultTextField'
 
 const TipNewPage = () => {
   const navigate = useNavigate()
@@ -47,35 +47,33 @@ const TipNewPage = () => {
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" gap={2}>
             <div>
-              <TextField
+              <DefaultTextField
+                id="title"
                 label="제목"
-                variant="outlined"
-                type="text"
-                placeholder="제목을 입력해주세요."
                 required
-                fullWidth
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
             <div>
-              <TextField
+              <DefaultTextField
+                id="content"
                 label="내용"
-                placeholder="내용을 입력해주세요."
                 required
                 multiline
-                fullWidth
                 rows={10}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
             </div>
             <Box display="flex" justifyContent="end" gap={2}>
-              <Button type="submit" variant="contained">
+              <Button type="submit" variant="contained" color="info">
                 등록
               </Button>
               <Link to="/tips">
-                <Button variant="outlined">목록</Button>
+                <Button variant="contained" color="secondary">
+                  목록
+                </Button>
               </Link>
             </Box>
           </Box>
