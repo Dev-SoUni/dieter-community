@@ -1,4 +1,4 @@
-import type { Typography } from '@mui/material/styles/createTypography'
+import type { TypographyOptions } from '@mui/material/styles/createTypography'
 
 export function remToPx(value: string) {
   return Math.round(parseFloat(value) * 16)
@@ -32,7 +32,7 @@ export function responsiveFontSizes({
 
 // ----------------------------------------------------------------------
 
-export const typography: Typography = {
+export const typography: TypographyOptions = {
   // Font Weight
   fontWeightRegular: 400,
   fontWeightMedium: 500,
