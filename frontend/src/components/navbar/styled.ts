@@ -24,7 +24,6 @@ export const List = styled.ul`
   list-style: none;
 `
 
-// TODO: 버튼 기본 CSS 속성 공통적으로 제거하기
 export const LinkButton = styled(Link)`
   padding: 12px 10px;
   color: #425968;

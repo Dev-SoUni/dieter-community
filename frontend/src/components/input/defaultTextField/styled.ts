@@ -11,16 +11,12 @@ export const Label = styled.label`
   display: inline-block;
   position: relative;
   color: #4e5968;
-  padding: 4px 4px 4px 0;
+  padding: 4px 4px 0 0;
 `
 
 export const RequiredDotWrap = styled.div`
   display: flex;
   position: absolute;
-  top: 0;
+  top: 2px;
   right: 0;
-`
-
-export const RequiredDot = styled.img`
-  width: 4px;
 `
