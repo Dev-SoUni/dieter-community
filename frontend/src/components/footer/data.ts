@@ -22,14 +22,6 @@ export const sites = [
         label: '브랜드 리소스센터',
         href: '/',
       },
-      {
-        label: '토스의 개인정보 보호',
-        href: '/',
-      },
-      {
-        label: '토스유스카드',
-        href: '/',
-      },
     ],
   },
   {
@@ -40,27 +32,27 @@ export const sites = [
         href: '/',
       },
       {
-        label: '토스페이먼츠',
+        label: '페이먼츠',
         href: '/',
       },
       {
-        label: '토스인슈어런스',
+        label: '인슈어런스',
         href: '/',
       },
       {
-        label: '토스증권',
+        label: '증권',
         href: '/',
       },
       {
-        label: '토스씨엑스',
+        label: '씨엑스',
         href: '/',
       },
       {
-        label: '토스뱅크',
+        label: '스뱅크',
         href: '/',
       },
       {
-        label: '토스플레이스',
+        label: '플레이스',
         href: '/',
       },
     ],
@@ -73,7 +65,7 @@ export const sites = [
         href: '/',
       },
       {
-        label: '토스쇼핑 입점문의',
+        label: '쇼핑 입점문의',
         href: '/',
       },
       {
