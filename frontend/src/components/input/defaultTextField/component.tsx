@@ -1,11 +1,23 @@
+import { useController } from 'react-hook-form'
 import Box from '@mui/material/Box'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
+
+import type { Control, FieldValues, Path } from 'react-hook-form'
 import type { TextFieldProps } from '@mui/material/TextField'
 
 import * as SC from './styled'
 
-export const DefaultTextField = (props: TextFieldProps) => {
-  const { id, label, required } = props
+interface DefaultTextFieldProps<T extends FieldValues> {
+  control: Control<T>
+  name: Path<T>
+}
+
+export const DefaultTextField = <T extends FieldValues>(
+  props: DefaultTextFieldProps<T> & TextFieldProps,
+) => {
+  const { id, label, name, control, required } = props
+
+  const { field } = useController({ name, control })
 
   return (
     <Box>
@@ -20,7 +32,12 @@ export const DefaultTextField = (props: TextFieldProps) => {
         )}
       </SC.Label>
 
-      <SC.DefaultTextField {...props} label="" />
+      <SC.DefaultTextField
+        {...props}
+        label=""
+        value={field.value}
+        onChange={field.onChange}
+      />
     </Box>
   )
 }

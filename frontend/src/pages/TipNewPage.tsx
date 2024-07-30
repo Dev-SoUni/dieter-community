@@ -1,41 +1,39 @@
-import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
 import { defaultAxios } from '../config/axios.ts'
 import CustomHelmet from '../components/helmet'
 import DefaultTextField from '../components/input/defaultTextField'
+import { TipSchema } from '../schemas/tip.tsx'
 
 const TipNewPage = () => {
   const navigate = useNavigate()
 
-  const [title, setTitle] = useState<string>('')
-  const [content, setContent] = useState<string>('')
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof TipSchema>>({
+    resolver: zodResolver(TipSchema),
+    defaultValues: {
+      title: '',
+      content: '',
+    },
+  })
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!title) {
-      alert('제목은 필수 입력 사항입니다.')
-      return
-    }
-    if (!content) {
-      alert('내용은 필수 입력 사항입니다.')
-      return
-    }
-
+  const onSubmit = handleSubmit(async (value) => {
     try {
-      await defaultAxios.post('/api/tips', {
-        title,
-        content,
-      })
+      await defaultAxios.post(`/api/tips`, value)
       alert('꿀팁이 등록되었습니다.')
       navigate('/tips')
     } catch (e) {
       alert('죄송합니다. 관리자에게 문의주세요.')
     }
-  }
+  })
 
   return (
     <div>
@@ -44,27 +42,27 @@ const TipNewPage = () => {
         description="꿀팁 등록 페이지입니다."
       />
       <div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={onSubmit}>
           <Box display="flex" flexDirection="column" gap={2}>
             <div>
               <DefaultTextField
-                id="title"
                 label="제목"
+                name="title"
+                control={control}
                 required
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
               />
+              {errors.title && errors.title.message}
             </div>
             <div>
               <DefaultTextField
-                id="content"
                 label="내용"
+                name="content"
+                control={control}
                 required
                 multiline
                 rows={10}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
               />
+              {errors.content && errors.content.message}
             </div>
             <Box display="flex" justifyContent="end" gap={2}>
               <Button type="submit" variant="contained" color="info">

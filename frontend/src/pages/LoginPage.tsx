@@ -1,29 +1,36 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
+import CustomHelmet from '../components/helmet'
 import { useAppDispatch, useAppSelector } from '../app/hook.ts'
 import { setAccessToken, setMember } from '../features/auth/authSlice.ts'
 import { authenticate } from '../api/auth.ts'
-import CustomHelmet from '../components/helmet'
+import { LoginSchema } from '../schemas/login.tsx'
 
-interface FormInputs {
-  email: string
-  password: string
-}
+import { z } from 'zod'
 
 const LoginPage = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const authStore = useAppSelector((state) => state.auth)
 
-  const [formInputs, setFormInputs] = useState<FormInputs>({
-    email: '',
-    password: '',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   })
 
   useEffect(() => {
@@ -32,26 +39,17 @@ const LoginPage = () => {
     }
   }, [authStore.accessToken])
 
-  const handleFormInputsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }))
-    e.target.name
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const onSubmit = handleSubmit(async (values) => {
     try {
-      const { email, nickname, accessToken } = await authenticate(formInputs)
+      const { email, nickname, accessToken } = await authenticate(values)
 
       window.localStorage.setItem('accessToken', accessToken)
       dispatch(setAccessToken(accessToken))
       dispatch(setMember({ email, nickname }))
     } catch (error) {
-      alert('관리자에게 문의주세요.')
+      alert('로그인에 실패했습니다.')
     }
-  }
+  })
 
   return (
     <Box
@@ -80,30 +78,28 @@ const LoginPage = () => {
           로그인
         </Typography>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={onSubmit}>
           <Stack direction="column" gap={2}>
             <Box>
               <TextField
                 variant="standard"
                 type="email"
-                name="email"
                 label="이메일 주소"
-                required
                 fullWidth
-                value={formInputs.email}
-                onChange={handleFormInputsChange}
+                error={!!errors.email}
+                helperText={errors.email && errors.email.message}
+                {...register('email')}
               />
             </Box>
             <Box>
               <TextField
                 variant="standard"
                 type="password"
-                name="password"
                 label="비밀번호"
-                required
                 fullWidth
-                value={formInputs.password}
-                onChange={handleFormInputsChange}
+                error={!!errors.password}
+                helperText={errors.password && errors.password.message}
+                {...register('password')}
               />
             </Box>
             <Box>
