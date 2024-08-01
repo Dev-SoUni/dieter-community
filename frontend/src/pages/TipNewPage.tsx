@@ -47,22 +47,24 @@ const TipNewPage = () => {
             <div>
               <DefaultTextField
                 label="제목"
+                id="title"
                 name="title"
                 control={control}
-                required
+                error={!!errors.title}
+                helperText={errors.title && errors.title.message}
               />
-              {errors.title && errors.title.message}
             </div>
             <div>
               <DefaultTextField
                 label="내용"
+                id="content"
                 name="content"
                 control={control}
-                required
                 multiline
                 rows={10}
+                error={!!errors.content}
+                helperText={errors.content && errors.content.message}
               />
-              {errors.content && errors.content.message}
             </div>
             <Box display="flex" justifyContent="end" gap={2}>
               <Button type="submit" variant="contained" color="info">
