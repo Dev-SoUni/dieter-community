@@ -1,49 +1,98 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 
 import { defaultAxios } from '../config/axios.ts'
 import type { TipResponseDTO } from '../ts/dto.ts'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
+
 import CustomHelmet from '../components/helmet'
 import DefaultTextField from '../components/input/defaultTextField'
+import { TipSchema } from '../schemas/tip.tsx'
+
+const EditForm = ({ tip }: { tip: TipResponseDTO }) => {
+  const navigate = useNavigate()
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof TipSchema>>({
+    resolver: zodResolver(TipSchema),
+    defaultValues: {
+      title: tip.title,
+      content: tip.content,
+    },
+  })
+
+  const onSubmit = handleSubmit(async (value) => {
+    try {
+      await defaultAxios.patch(`/api/tips/${tip.id}`, value)
+      navigate('/tips')
+    } catch (e) {
+      alert('꿀팁 등록이 안되었습니다. 잠시 후 다시 시도해 주세요.')
+    }
+  })
+
+  return (
+    <form onSubmit={onSubmit}>
+      <Box display="flex" flexDirection="column" gap={2}>
+        <Box>
+          <DefaultTextField
+            label="제목"
+            id="title"
+            name="title"
+            control={control}
+            error={!!errors.title}
+            helperText={errors.title && errors.title.message}
+          />
+        </Box>
+        <Box>
+          <DefaultTextField
+            label="내용"
+            id="content"
+            name="content"
+            multiline
+            rows={10}
+            control={control}
+            error={!!errors.content}
+            helperText={errors.content && errors.content.message}
+          />
+        </Box>
+        <Box display="flex" justifyContent="end" gap={2}>
+          <Button type="submit" variant="contained" color="info">
+            수정
+          </Button>
+          <Link to={`/tips/${tip.id}`}>
+            <Button type="button" variant="contained" color="secondary">
+              목록
+            </Button>
+          </Link>
+        </Box>
+      </Box>
+    </form>
+  )
+}
 
 const TipEditPage = () => {
   const params = useParams()
-  const navigate = useNavigate()
   const [tip, setTip] = useState<TipResponseDTO | null>(null)
-  const [title, setTitle] = useState<string>('')
-  const [content, setContent] = useState<string>('')
 
   useEffect(() => {
     const requestTip = async () => {
       try {
         const response = await defaultAxios.get(`/api/tips/${params.id}`)
         setTip(response.data)
-        setTitle(response.data.title)
-        setContent(response.data.content)
       } catch (error) {
         alert('관리자에게 문의주세요.')
       }
     }
     requestTip()
   }, [])
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    try {
-      await defaultAxios.patch(`/api/tips/${params.id}`, {
-        title,
-        content,
-      })
-
-      alert('해당 게시물이 수정되었습니다.')
-      navigate(`/tips/${params.id}`)
-    } catch (error) {
-      alert('죄송합니다. 문제가 발생했습니다.')
-    }
-  }
 
   if (tip == null) {
     return (
@@ -64,40 +113,7 @@ const TipEditPage = () => {
         꿀팁 수정
       </Typography>
       <Box mt={2}>
-        <form onSubmit={handleSubmit}>
-          <Box display="flex" flexDirection="column" gap={2}>
-            <Box>
-              <DefaultTextField
-                id="title"
-                label="제목"
-                value={title}
-                required
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </Box>
-            <Box>
-              <DefaultTextField
-                id="content"
-                label="내용"
-                value={content}
-                required
-                multiline
-                rows={10}
-                onChange={(e) => setContent(e.target.value)}
-              />
-            </Box>
-            <Box display="flex" justifyContent="end" gap={2}>
-              <Button type="submit" variant="contained" color="info">
-                수정
-              </Button>
-              <Link to={`/tips/${tip.id}`}>
-                <Button type="button" variant="contained" color="secondary">
-                  목록
-                </Button>
-              </Link>
-            </Box>
-          </Box>
-        </form>
+        <EditForm tip={tip} />
       </Box>
     </main>
   )
