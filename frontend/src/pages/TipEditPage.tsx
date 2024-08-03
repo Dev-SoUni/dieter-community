@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -33,6 +34,7 @@ const EditForm = ({ tip }: { tip: TipResponseDTO }) => {
     try {
       await defaultAxios.patch(`/api/tips/${tip.id}`, value)
       navigate('/tips')
+      toast.success('꿀팁이 등록되었습니다.')
     } catch (e) {
       alert('꿀팁 등록이 안되었습니다. 잠시 후 다시 시도해 주세요.')
     }

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
+import { Toaster } from 'sonner'
 
 import ThemeProvider from './theme'
 
@@ -92,6 +93,7 @@ const App = () => {
       />
       <ThemeProvider>
         <RouterProvider router={router} />
+        <Toaster />
       </ThemeProvider>
     </HelmetProvider>
   )
