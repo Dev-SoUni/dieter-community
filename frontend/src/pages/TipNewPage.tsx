@@ -31,7 +31,7 @@ const TipNewPage = () => {
       alert('꿀팁이 등록되었습니다.')
       navigate('/tips')
     } catch (e) {
-      alert('죄송합니다. 관리자에게 문의주세요.')
+      alert('꿀팁 등록이 안되었습니다. 잠시 후 다시 시도해 주세요.')
     }
   })
 
