@@ -14,7 +14,8 @@ pipeline {
                 print('be-build')
                 echo "Branch: ${env.GIT_BRANCH}"
                 echo "Commit: ${env.GIT_COMMIT}"
-                echo "Repository: ${env.GIT_URL}"
+                echo "buildNumber: ${env.BUILD_NUMBER}"
+                echo "JobName: ${env.JOB_NAME}"
 //                 dir("./backend") {
 //                     sh "./gradlew clean build"
 //                 }
