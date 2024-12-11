@@ -14,7 +14,8 @@ pipeline {
         stage('Process Payload') {
             steps {
                 script {
-                    echo "$payload"
+//                     echo "$payload"
+                    echo "repository.id $payload.repository.id"
                 }
             }
         }
