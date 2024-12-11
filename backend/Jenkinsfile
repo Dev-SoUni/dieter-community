@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+    tools {
+        gradle 'gradle'
+    }
+    stages {
+        stage('Git Clone') {
+            steps {
+                git branch: 'developer', url: 'https://github.com/Dev-SoUni/dieter-community.git'
+            }
+        }
+//         stage('BE-Build') {
+//             steps {
+//                 dir("./backend") {
+//                     sh "./gradlew clean build"
+//                 }
+//             }
+//         }
+    }
+}
