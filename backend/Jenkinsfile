@@ -9,6 +9,7 @@ pipeline {
                 echo "JobName: ${env.JOB_NAME}"
 
                 echo "Raw Payload: ${params.payload}"
+                echo "Payload: ${payload}"
             }
         }
         stage('Git Clone') {
