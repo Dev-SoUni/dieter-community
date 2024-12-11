@@ -12,11 +12,12 @@ pipeline {
                 echo "JobName: ${env.JOB_NAME}"
             }
         }
-//         stage('Git Clone') {
-//             steps {
-//                 git branch: 'developer', url: 'https://github.com/Dev-SoUni/dieter-community.git'
-//             }
-//         }
+        stage('Git Clone') {
+            steps {
+                git branch: 'developer', url: 'https://github.com/Dev-SoUni/dieter-community.git'
+            }
+        }
+
 //         stage('BE-Build') {
 //             steps {
 //                 dir("./backend") {
