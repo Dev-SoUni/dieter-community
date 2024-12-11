@@ -5,11 +5,12 @@ pipeline {
             genericVariables: [
                 [key: 'payload', value: '$']
             ],
-            token: 'your-token', // GitHub Webhook과 일치하는 토큰
+            token: 'sybyun-test', // GitHub Webhook과 일치하는 토큰
             printContributedVariables: true, // 디버깅 용도
             printPostContent: true // 디버깅 용도
         )
     }
+
     stages {
         stage('Process Payload') {
             steps {
