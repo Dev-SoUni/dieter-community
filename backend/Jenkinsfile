@@ -3,7 +3,7 @@ pipeline {
     triggers {
         GenericTrigger(
             genericVariables: [
-                [key: 'ref', value: '$.ref']
+                [key: 'payload', value: '$']
             ],
 
         )
@@ -13,7 +13,7 @@ pipeline {
         stage('Process Payload') {
             steps {
                 script {
-                    echo "$ref"
+                    echo "$payload"
                 }
             }
         }
