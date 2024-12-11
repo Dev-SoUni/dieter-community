@@ -13,6 +13,7 @@ pipeline {
             steps {
                 script {
                     echo "$payload"
+                    echo "$payload.repository.id"
                 }
             }
         }
