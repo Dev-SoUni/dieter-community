@@ -9,12 +9,13 @@ pipeline {
                 git branch: 'developer', url: 'https://github.com/Dev-SoUni/dieter-community.git'
             }
         }
-//         stage('BE-Build') {
-//             steps {
+        stage('BE-Build') {
+            steps {
+                print('be-build')
 //                 dir("./backend") {
 //                     sh "./gradlew clean build"
 //                 }
-//             }
-//         }
+            }
+        }
     }
 }
