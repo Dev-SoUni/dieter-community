@@ -1,20 +1,28 @@
 pipeline {
     agent any
+    triggers {
+        GenericTrigger(
+            genericVariables: [
+                [key: 'payload', value: '$']
+            ],
+            token: 'your-token', // GitHub Webhook과 일치하는 토큰
+            printContributedVariables: true, // 디버깅 용도
+            printPostContent: true // 디버깅 용도
+        )
+    }
     stages {
-        stage('Stage Info') {
+        stage('Process Payload') {
             steps {
-                echo "Branch: ${env.GIT_BRANCH}"
-                echo "Commit: ${env.GIT_COMMIT}"
-                echo "buildNumber: ${env.BUILD_NUMBER}"
-                echo "JobName: ${env.JOB_NAME}"
+                script {
+                    // JSON 파싱
+                    def jsonSlurper = new groovy.json.JsonSlurper()
+                    def payloadJson = jsonSlurper.parseText(env.payload)
 
-                echo "Raw Payload: ${params.payload}"
-                echo "Payload: ${payload}"
-            }
-        }
-        stage('Git Clone') {
-            steps {
-                git branch: 'developer', url: 'https://github.com/Dev-SoUni/dieter-community.git'
+                    // 필요한 데이터 출력
+                    echo "Branch: ${payloadJson.ref}"
+                    echo "Repository: ${payloadJson.repository.full_name}"
+                    echo "Commit Message: ${payloadJson.head_commit.message}"
+                }
             }
         }
     }
