@@ -12,6 +12,9 @@ pipeline {
         stage('BE-Build') {
             steps {
                 print('be-build')
+                echo "Branch: ${env.GIT_BRANCH}"
+                echo "Commit: ${env.GIT_COMMIT}"
+                echo "Repository: ${env.GIT_URL}"
 //                 dir("./backend") {
 //                     sh "./gradlew clean build"
 //                 }
