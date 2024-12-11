@@ -16,6 +16,5 @@ pipeline {
                 git branch: 'developer', url: 'https://github.com/Dev-SoUni/dieter-community.git'
             }
         }
-
     }
 }
