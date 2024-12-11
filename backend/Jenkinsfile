@@ -3,11 +3,9 @@ pipeline {
     triggers {
         GenericTrigger(
             genericVariables: [
-                [key: 'payload', value: '$']
+                [key: 'ref', value: '$'.ref]
             ],
-            token: 'sybyun-test', // GitHub Webhook과 일치하는 토큰
-            printContributedVariables: true, // 디버깅 용도
-            printPostContent: true // 디버깅 용도
+
         )
     }
 
@@ -15,14 +13,8 @@ pipeline {
         stage('Process Payload') {
             steps {
                 script {
-                    // JSON 파싱
-                    def jsonSlurper = new groovy.json.JsonSlurper()
-                    def payloadJson = jsonSlurper.parseText(env.payload)
 
-                    // 필요한 데이터 출력
-                    echo "Branch: ${payloadJson.ref}"
-                    echo "Repository: ${payloadJson.repository.full_name}"
-                    echo "Commit Message: ${payloadJson.head_commit.message}"
+                    echo "$ref"
                 }
             }
         }
