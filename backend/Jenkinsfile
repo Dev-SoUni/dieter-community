@@ -10,6 +10,8 @@ pipeline {
                 echo "Commit: ${env.GIT_COMMIT}"
                 echo "buildNumber: ${env.BUILD_NUMBER}"
                 echo "JobName: ${env.JOB_NAME}"
+
+                echo "Raw Payload: ${params.payload}"
             }
         }
         stage('Git Clone') {
