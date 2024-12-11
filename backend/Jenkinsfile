@@ -1,12 +1,12 @@
 pipeline {
     agent any
-    triggers {
-        GenericTrigger(
-            genericVariables: [
-                [key: 'payload', value: '$']
-            ]
-        )
-    }
+//     triggers {
+//         GenericTrigger(
+//             genericVariables: [
+//                 [key: 'payload', value: '$']
+//             ]
+//         )
+//     }
     stages {
         stage('Process GitHub Webhook Payload') {
             steps {
