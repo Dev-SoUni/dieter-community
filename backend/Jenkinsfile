@@ -12,8 +12,13 @@ pipeline {
         stage('Process Payload') {
             steps {
                 script {
-                    echo "$payload"
-                    echo "$payload.repository.id"
+                    // JSON 파싱
+                    def jsonSlurper = new groovy.json.JsonSlurper()
+                    def payloadJson = jsonSlurper.parseText(env.ayload)
+
+                    // 데이터 출력
+                    echo "$payloadJson.repository.id"
+
                 }
             }
         }
