@@ -5,7 +5,6 @@ pipeline {
             genericVariables: [
                 [key: 'payload', value: '$']
             ],
-
         )
     }
 
@@ -24,7 +23,6 @@ pipeline {
                     echo "updated_at $payloadJson.repository.updated_at"
                     echo "visibility $payloadJson.repository.visibility"
                     echo "visibility $payloadJson.repository.visibility"
-
 
                 }
             }
