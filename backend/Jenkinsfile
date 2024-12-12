@@ -24,6 +24,7 @@ pipeline {
                     echo "updated_at $payloadJson.repository.updated_at"
                     echo "visibility $payloadJson.repository.visibility"
 
+
                 }
             }
         }
