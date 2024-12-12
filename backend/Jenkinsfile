@@ -14,8 +14,9 @@ pipeline {
             steps {
                 script {
                     // JSON 파싱
+                    // 여기서 부터 다시 보기..!
                     def jsonSlurper = new groovy.json.JsonSlurper()
-                    def payloadJson = jsonSlurper.parseText(env.ayload)
+                    def payloadJson = jsonSlurper.parseText(payload)
 
                     // 데이터 출력
                     echo "$payloadJson.repository.id"
