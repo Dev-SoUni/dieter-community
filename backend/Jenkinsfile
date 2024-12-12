@@ -1,13 +1,6 @@
 pipeline {
     agent any
-    triggers {
-        GenericTrigger(
-            genericVariables: [
-                [key: 'payload', value: '$']
-            ],
-            token: 'sybyun-test',
-        )
-    }
+
 
 
     stages {
