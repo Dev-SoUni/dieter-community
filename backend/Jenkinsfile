@@ -19,7 +19,7 @@ pipeline {
                     def payloadJson = jsonSlurper.parseText(payload)
 
                     // 데이터 출력
-                    echo "$payloadJson.repository.id"
+                    echo "repository.id $payloadJson.repository.id"
 
                 }
             }
