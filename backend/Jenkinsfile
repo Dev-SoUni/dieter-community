@@ -14,12 +14,15 @@ pipeline {
             steps {
                 script {
                     // JSON 파싱
-                    // 여기서 부터 다시 보기..!
                     def jsonSlurper = new groovy.json.JsonSlurper()
                     def payloadJson = jsonSlurper.parseText(payload)
 
                     // 데이터 출력
-                    echo "repository.id $payloadJson.repository.id"
+                    echo "owner.name $payloadJson.repository.owner.name"
+                    echo "html_url $payloadJson.repository.html_url"
+                    echo "description $payloadJson.repository.description"
+                    echo "updated_at $payloadJson.repository.updated_at"
+                    echo "visibility $payloadJson.repository.visibility"
 
                 }
             }
