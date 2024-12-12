@@ -5,6 +5,7 @@ pipeline {
             genericVariables: [
                 [key: 'payload', value: '$']
             ],
+            token: 'sybyun-test',
         )
     }
 
